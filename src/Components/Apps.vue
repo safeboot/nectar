@@ -23,9 +23,20 @@
       <a
         :href="app.url"
         target="_blank"
-        class="app backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-sky-500/50 hover:border-pink-400 hover:-translate-y-1 hover:shadow-lg transition duration-300"
-        v-for="(app, name) in filteredApps"
+        class="app backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-sky-500/50 hover:border-pink-400 hover:shadow-lg transition duration-300"
+        v-for="(app, name, index) in filteredApps"
         :key="name"
+        v-motion="{
+          initial: {
+            opacity: 0,
+          },
+          enter: {
+            opacity: 1,
+            transition: {
+              delay: index * 25,
+            },
+          },
+        }"
       >
         <div
           class="icon size-11 md:size-12 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden"

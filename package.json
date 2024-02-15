@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vueuse/motion": "^2.0.0",
+    "defu": "^6.1.4",
     "vue": "^3.4.15"
   },
   "devDependencies": {
