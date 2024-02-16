@@ -1,0 +1,18 @@
+{
+    "servers": {
+        "Evolia": {
+            "host": "evolia.local"
+        },
+        "Flicker": {
+            "host": "flicker.local",
+            "port": 1234
+        }
+    },
+    "apps": {
+        "Plex": {
+            "server": "Evolia",
+            "url": "http://192.168.1.10:32400",
+            "icon": "https://media.sys.truenas.net/apps/plex/icons/icon.png"
+        }
+    }
+}
