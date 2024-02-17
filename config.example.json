@@ -1,7 +1,18 @@
 {
+    "settings": {
+        "weather": {
+            "enabled": true,
+            "location": {
+                "latitude": 43.33728837061606,
+                "longitude": 17.81504925295707
+            }
+        }
+    },
     "servers": {
         "Evolia": {
-            "host": "evolia.local"
+            "host": "evolia.local",
+            "key": "onetwothreefourfivesixseveneight",
+            "type": "truenas-scale"
         },
         "Flicker": {
             "host": "flicker.local",
