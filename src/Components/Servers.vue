@@ -45,7 +45,7 @@
             </p>
           </div>
         </div>
-        <div class="server-stats flex flex-col gap-2">
+        <div class="server-stats hidden flex flex-col gap-2">
           <div class="stat flex flex-col gap-1">
             <div class="header flex justify-between items-center">
               <h1 class="text-sm text-white">CPU Temp.</h1>
