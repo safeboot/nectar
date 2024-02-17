@@ -5,7 +5,7 @@
       <a
         :href="'https://' + server.host + ':' + (server.port ?? 443)"
         target="_blank"
-        class="server backdrop-blur-md border border-gray-500/50 p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-purple-500/50 hover:border-sky-400 hover:shadow-lg transition duration-300"
+        class="server backdrop-blur-md border border-gray-500/50 p-4 flex flex-col gap-4 rounded-xl shadow-md overflow-hidden active:shadow-purple-500/50 hover:border-sky-400 hover:shadow-lg transition duration-300"
         v-for="(server, name, index) in servers"
         :key="name"
         v-motion="{
@@ -20,15 +20,77 @@
           },
         }"
       >
-        <i class="fa-solid fa-server fa-xl text-sky-200"></i>
-        <div class="flex flex-col">
-          <div class="flex items-center gap-2">
-            <h1 class="text-white text-lg font-medium">{{ name }}</h1>
-            <div class="size-2 bg-purple-400 rounded-full"></div>
+        <div class="server-details flex items-center gap-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6 text-sky-200"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z"
+            />
+          </svg>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <h1 class="text-white text-lg font-medium">{{ name }}</h1>
+              <div class="size-2 bg-purple-400 rounded-full"></div>
+            </div>
+            <p class="text-sm text-gray-200">
+              {{ server.host }}{{ server.port ? ":" + server.port : "" }}
+            </p>
           </div>
-          <p class="text-sm text-gray-200">
-            {{ server.host }}{{ server.port ? ":" + server.port : "" }}
-          </p>
+        </div>
+        <div class="server-stats flex flex-col gap-2">
+          <div class="stat flex flex-col gap-1">
+            <div class="header flex justify-between items-center">
+              <h1 class="text-sm text-white">CPU Temp.</h1>
+              <p class="text-sm text-sky-300">50°C</p>
+            </div>
+            <div class="progress-bar w-full h-1 bg-gray-500/50 rounded-full">
+              <div
+                class="progress w-1/2 h-full bg-sky-400 rounded-full transition-all duration-500"
+              ></div>
+            </div>
+          </div>
+          <div class="stat flex flex-col gap-1">
+            <div class="header flex justify-between items-center">
+              <h1 class="text-sm text-white">Memory</h1>
+              <p class="text-sm text-indigo-300">38%</p>
+            </div>
+            <div class="progress-bar w-full h-1 bg-gray-500/50 rounded-full">
+              <div
+                class="progress w-1/3 h-full bg-indigo-400 rounded-full transition-all duration-500"
+              ></div>
+            </div>
+          </div>
+          <div class="stat flex flex-col gap-1">
+            <div class="header flex justify-between items-center">
+              <h1 class="text-sm text-white">System Load</h1>
+              <p class="text-sm text-purple-300">75%</p>
+            </div>
+            <div class="progress-bar w-full h-1 bg-gray-500/50 rounded-full">
+              <div
+                class="progress w-3/4 h-full bg-purple-400 rounded-full transition-all duration-500"
+              ></div>
+            </div>
+          </div>
+          <div class="stat flex flex-col gap-1">
+            <div class="header flex justify-between items-center">
+              <h1 class="text-sm text-white">Uptime</h1>
+              <p class="text-sm text-pink-300">2 months, 9 days</p>
+            </div>
+          </div>
+          <div class="stat flex flex-col gap-1">
+            <div class="header flex justify-between items-center">
+              <h1 class="text-sm text-white">Last Seen</h1>
+              <p class="text-sm text-red-300">30 Seconds Ago</p>
+            </div>
+          </div>
         </div>
       </a>
     </div>
@@ -37,12 +99,61 @@
 
 <script>
 import json from "../../config.json";
+import axios from "axios";
 
 export default {
   data() {
     return {
       servers: json.servers,
     };
+  },
+
+  mounted() {
+    setInterval(() => {
+      //this.checkServers();
+    }, 5000);
+  },
+
+  methods: {
+    async checkServers() {
+      Object.entries(this.servers).forEach(async (server) => {
+        server = server[1];
+
+        if (server.type !== "truenas-scale") {
+          return;
+        }
+
+        const data = {
+          graphs: [
+            { name: "cputemp" },
+            { name: "memory" },
+            { name: "load" },
+            { name: "uptime" },
+          ],
+          reporting_query: {
+            start: Math.floor(Date.now() / 1000),
+          },
+        };
+
+        const response = await fetch(
+          `http://${server.host}:${server.port ?? 80}/api/v2.0/reporting/get_data`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${server.key}`,
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      });
+    },
   },
 };
 </script>
