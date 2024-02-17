@@ -1,11 +1,9 @@
 <template>
-  <div class="nectar w-full h-screen bg-cover bg-center">
+  <div class="nectar w-full min-h-screen h-full z-10">
     <div
-      class="nectar-container w-full h-screen bg-black/50 backdrop-blur-sm p-4 flex justify-center overflow-hidden z-0"
+      class="nectar-container w-full min-h-screen h-full bg-black/50 backdrop-blur-sm p-4 flex justify-center z-0"
     >
-      <div
-        class="main w-full max-w-6xl min-h-screen py-16 flex flex-col gap-12 overflow-x-hidden overflow-y-auto"
-      >
+      <div class="main w-full max-w-6xl h-full py-16 flex flex-col gap-12">
         <DateTime />
 
         <Servers />
@@ -13,8 +11,11 @@
         <Apps />
       </div>
     </div>
-    <p class="fixed top-4 left-4 text-xl text-white/50 z-10">nectar.</p>
+    <p class="absolute md:fixed top-4 left-4 text-xl text-white/50 z-20">nectar.</p>
   </div>
+  <div
+    class="wallpaper fixed top-0 left-0 w-full h-screen bg-cover bg-center -z-10"
+  ></div>
 </template>
 
 <script>
@@ -35,7 +36,7 @@ export default {
     const season = Math.floor((new Date().getMonth() + 1) / (12 / wallpapers.length));
 
     document.querySelector(
-      ".nectar"
+      ".wallpaper"
     ).style.backgroundImage = `url('${wallpapers[season][0]}')`;
   },
 };
