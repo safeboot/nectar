@@ -97,15 +97,14 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import * as json from "../../config.json";
-import { defineComponent } from "vue";
 
-export default defineComponent({
+export default {
   data() {
     return {
       servers: json.servers,
     };
   },
-});
+};
 </script>

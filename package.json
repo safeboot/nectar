@@ -1,15 +1,14 @@
 {
   "name": "nectar",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.9.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/vue": "^2.0.0",
     "@vueuse/motion": "^2.0.0",
     "defu": "^6.1.4",
     "vue": "^3.4.15"
@@ -20,8 +19,6 @@
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.2.2",
-    "vite": "^5.1.0",
-    "vue-tsc": "^1.8.27"
+    "vite": "^5.1.0"
   }
 }

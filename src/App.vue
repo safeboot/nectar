@@ -18,13 +18,12 @@
   ></div>
 </template>
 
-<script lang="ts">
+<script>
 import DateTime from "./Components/DateTime.vue";
 import Servers from "./Components/Servers.vue";
 import Apps from "./Components/Apps.vue";
-import { defineComponent } from "vue";
 
-export default defineComponent({
+export default {
   components: {
     DateTime,
     Servers,
@@ -32,21 +31,15 @@ export default defineComponent({
   },
 
   mounted() {
-    const wallpapers: Array<any> = Object.entries(
-      import.meta.glob("/public/wallpapers/*")
-    );
+    const wallpapers = Object.entries(import.meta.glob("/public/wallpapers/*"));
 
-    const season: number = Math.floor(
-      (new Date().getMonth() + 1) / (12 / wallpapers.length)
-    );
+    const season = Math.floor((new Date().getMonth() + 1) / (12 / wallpapers.length));
 
-    const wallpaper: HTMLElement | null = document.querySelector<HTMLElement>(
-      ".wallpaper"
-    );
+    const wallpaper = document.querySelector < HTMLElement > ".wallpaper";
 
     if (wallpaper) {
       wallpaper.style.backgroundImage = `url('${wallpapers[season][0]}')`;
     }
   },
-});
+};
 </script>
