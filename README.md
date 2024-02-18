@@ -1,18 +1,60 @@
-# Vue 3 + TypeScript + Vite
+<p align="center">
+   <img src="public/logo_full.png" width="512px">
+</p>
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+<p align="center">
+   Small, self-hostable and customizable homelab dashboard.
+</p>
 
-## Recommended IDE Setup
+---
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+<p align="center" style="font-style: italic; font-weight: 600">"Ever dreaming to taste the sweet nectar of morality."</p>
 
-## Type Support For `.vue` Imports in TS
+## About the project
+Nectar is simple and small dashboard for homelabers. It's designed to be self-hosted and customized to your heart's content. This app uses very little resources and can be run totally offline.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+> **THIS PROJECT IS IN BETA AND UNTESTED. USE AT YOUR OWN CAUTION.**
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+- 🌤️ **Weather Widget** (powered by Open-Meteo) - you can configure the location in the config file without using your actual location or any telemetry.
+- 💽 **Server List** - this app relies on nothing but your configuration, you can adjust the name, hostname and the port. Server list is designed to be a simple list of your servers.
+- 🥪 **Apps List** - Nectar allows you to categorize your apps by server and search your collection.
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+<p align="center">
+   <img src=".github/preview.png">
+</p>
+
+## Installation
+Before you install Nectar, you will need to have Node.js as well as NPM installed on your system. You can download Node.js from [here](https://nodejs.org/en/download/).
+
+After you have Node, clone or download the project and extract it to a folder. Open a terminal in the folder and run the following command:
+
+```bash
+npm install
+```
+
+Once the installation is complete, you can run the app locally using the following command:
+
+```bash
+npm run dev
+```
+
+This will start the app on `http://localhost:5173`. You can access the app by opening your browser and navigating to the address.
+
+> Currently the app is not designed to be run in production, this is built with Vite so take a look at the "Building for Production" section for more information.
+
+**One more step!**
+
+You will need to configure the app to your liking. You can do this by editing the `config.json` file in the root of the project. The file should be self-explanatory, but if you have any questions, feel free to open an issue.
+
+Then create a folder called `wallpapers` inside the `public` folder and place your wallpapers in there. The app will automatically cycle through the wallpapers.
+
+And that's it! You're all set up and ready to go.
+
+## Roadmap
+- [ ] Add bookmarks panel
+- [ ] Adjust config through the UI
+- [ ] Wallpaper picker
+- [ ] Docker support
+
+## License
+Licensed under the Apache License, Version 2.0. Check the [LICENSE](LICENSE) file for more information.
