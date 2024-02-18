@@ -10,7 +10,7 @@
 
 <p align="center" style="font-style: italic; font-weight: 600">"Ever dreaming to taste the sweet nectar of morality."</p>
 
-## About the project
+## About the Project
 Nectar is simple and small dashboard for homelabers. It's designed to be self-hosted and customized to your heart's content. This app uses very little resources and can be run totally offline.
 
 > **THIS PROJECT IS IN BETA AND UNTESTED. USE AT YOUR OWN CAUTION.**
@@ -55,6 +55,7 @@ And that's it! You're all set up and ready to go.
 - [ ] Adjust config through the UI
 - [ ] Wallpaper picker
 - [ ] Docker support
+- [ ] Demo Page
 
 ## License
 Licensed under the Apache License, Version 2.0. Check the [LICENSE](LICENSE) file for more information.
