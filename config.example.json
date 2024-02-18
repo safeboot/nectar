@@ -10,9 +10,7 @@
     },
     "servers": {
         "Evolia": {
-            "host": "evolia.local",
-            "key": "onetwothreefourfivesixseveneight",
-            "type": "truenas-scale"
+            "host": "evolia.local"
         },
         "Flicker": {
             "host": "flicker.local",

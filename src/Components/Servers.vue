@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import json from "../../config.json";
+import * as json from "../../config.json";
 import { defineComponent } from "vue";
 
 export default defineComponent({

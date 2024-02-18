@@ -32,13 +32,21 @@ export default defineComponent({
   },
 
   mounted() {
-    const wallpapers = Object.entries(import.meta.glob("/public/wallpapers/*"));
+    const wallpapers: Array<any> = Object.entries(
+      import.meta.glob("/public/wallpapers/*")
+    );
 
-    const season = Math.floor((new Date().getMonth() + 1) / (12 / wallpapers.length));
+    const season: number = Math.floor(
+      (new Date().getMonth() + 1) / (12 / wallpapers.length)
+    );
 
-    document.querySelector(
+    const wallpaper: HTMLElement | null = document.querySelector<HTMLElement>(
       ".wallpaper"
-    ).style.backgroundImage = `url('${wallpapers[season][0]}')`;
+    );
+
+    if (wallpaper) {
+      wallpaper.style.backgroundImage = `url('${wallpapers[season][0]}')`;
+    }
   },
 });
 </script>

@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import json from "../../config.json";
+import * as json from "../../config.json";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -108,7 +108,7 @@ export default defineComponent({
       if (!this.settings.weather.enabled) {
         return;
       }
-      const response = await fetch(
+      await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${this.settings.weather.location.latitude}&longitude=${this.settings.weather.location.longitude}&current=temperature_2m,weather_code`
       )
         .then((response) => {
@@ -120,70 +120,72 @@ export default defineComponent({
         });
     },
     getWeatherIcon() {
-      switch (this.weather.weatherCode) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-          return "http://openweathermap.org/img/wn/01d@2x.png";
-          break;
+      if (this.weather.weatherCode) {
+        switch (this.weather.weatherCode) {
+          case 0:
+          case 1:
+          case 2:
+          case 3:
+            return "http://openweathermap.org/img/wn/01d@2x.png";
+            break;
 
-        case 45:
-        case 48:
-          return "http://openweathermap.org/img/wn/50d@2x.png";
-          break;
+          case 45:
+          case 48:
+            return "http://openweathermap.org/img/wn/50d@2x.png";
+            break;
 
-        case 51:
-        case 53:
-        case 55:
-          return "http://openweathermap.org/img/wn/09d@2x.png";
-          break;
+          case 51:
+          case 53:
+          case 55:
+            return "http://openweathermap.org/img/wn/09d@2x.png";
+            break;
 
-        case 56:
-        case 57:
-          return "http://openweathermap.org/img/wn/09d@2x.png";
-          break;
+          case 56:
+          case 57:
+            return "http://openweathermap.org/img/wn/09d@2x.png";
+            break;
 
-        case 61:
-        case 63:
-        case 65:
-          return "http://openweathermap.org/img/wn/10d@2x.png";
-          break;
+          case 61:
+          case 63:
+          case 65:
+            return "http://openweathermap.org/img/wn/10d@2x.png";
+            break;
 
-        case 66:
-        case 67:
-          return "http://openweathermap.org/img/wn/10d@2x.png";
-          break;
+          case 66:
+          case 67:
+            return "http://openweathermap.org/img/wn/10d@2x.png";
+            break;
 
-        case 71:
-        case 73:
-        case 75:
-          return "http://openweathermap.org/img/wn/13d@2x.png";
-          break;
+          case 71:
+          case 73:
+          case 75:
+            return "http://openweathermap.org/img/wn/13d@2x.png";
+            break;
 
-        case 77:
-          return "http://openweathermap.org/img/wn/13d@2x.png";
-          break;
+          case 77:
+            return "http://openweathermap.org/img/wn/13d@2x.png";
+            break;
 
-        case 80:
-        case 81:
-        case 82:
-          return "http://openweathermap.org/img/wn/09d@2x.png";
-          break;
+          case 80:
+          case 81:
+          case 82:
+            return "http://openweathermap.org/img/wn/09d@2x.png";
+            break;
 
-        case 85:
-        case 86:
-          return "http://openweathermap.org/img/wn/13d@2x.png";
-          break;
+          case 85:
+          case 86:
+            return "http://openweathermap.org/img/wn/13d@2x.png";
+            break;
 
-        case 95:
-          return "http://openweathermap.org/img/wn/11d@2x.png";
-          break;
+          case 95:
+            return "http://openweathermap.org/img/wn/11d@2x.png";
+            break;
 
-        case 96:
-        case 99:
-          return "http://openweathermap.org/img/wn/11d@2x.png";
-          break;
+          case 96:
+          case 99:
+            return "http://openweathermap.org/img/wn/11d@2x.png";
+            break;
+        }
       }
     },
   },

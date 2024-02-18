@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import json from "../../config.json";
+import * as json from "../../config.json";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -98,13 +98,13 @@ export default defineComponent({
 
       if (this.server && this.server !== "null") {
         apps = Object.fromEntries(
-          Object.entries(apps).filter(([name, app]) => app.server === this.server)
+          Object.entries(apps).filter(([, app]) => app.server === this.server)
         );
       }
 
       if (this.search && this.search !== "") {
         apps = Object.fromEntries(
-          Object.entries(apps).filter(([name, app]) =>
+          Object.entries(apps).filter(([name]) =>
             name.toLowerCase().includes(this.search.toLowerCase())
           )
         );
