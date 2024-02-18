@@ -35,7 +35,7 @@ export default {
 
     const season = Math.floor((new Date().getMonth() + 1) / (12 / wallpapers.length));
 
-    const wallpaper = document.querySelector < HTMLElement > ".wallpaper";
+    const wallpaper = document.querySelector(".wallpaper");
 
     if (wallpaper) {
       wallpaper.style.backgroundImage = `url('${wallpapers[season][0]}')`;
