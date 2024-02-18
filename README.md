@@ -58,4 +58,4 @@ And that's it! You're all set up and ready to go.
 - [ ] Demo Page
 
 ## License
-Licensed under the Apache License, Version 2.0. Check the [LICENSE](LICENSE) file for more information.
+Licensed under the Apache License, Version 2.0. Check the [LICENSE](LICENSE.md) file for more information.
