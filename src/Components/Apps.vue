@@ -68,10 +68,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import json from "../../config.json";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   data() {
     return {
       apps: json.apps,
@@ -112,5 +113,5 @@ export default {
       this.filteredApps = apps;
     },
   },
-};
+});
 </script>

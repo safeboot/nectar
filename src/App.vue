@@ -18,12 +18,13 @@
   ></div>
 </template>
 
-<script>
+<script lang="ts">
 import DateTime from "./Components/DateTime.vue";
 import Servers from "./Components/Servers.vue";
 import Apps from "./Components/Apps.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     DateTime,
     Servers,
@@ -39,5 +40,5 @@ export default {
       ".wallpaper"
     ).style.backgroundImage = `url('${wallpapers[season][0]}')`;
   },
-};
+});
 </script>

@@ -19,10 +19,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import json from "../../config.json";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   data() {
     return {
       settings: json.settings,
@@ -90,7 +91,7 @@ export default {
 
       setTimeout(this.updateDateTime, 1000);
     },
-    getDateOrdinal(day) {
+    getDateOrdinal(day: number) {
       if (day > 3 && day < 21) return "th";
       switch (day % 10) {
         case 1:
@@ -186,5 +187,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

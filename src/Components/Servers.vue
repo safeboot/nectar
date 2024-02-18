@@ -97,63 +97,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import json from "../../config.json";
-import axios from "axios";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   data() {
     return {
       servers: json.servers,
     };
   },
-
-  mounted() {
-    setInterval(() => {
-      //this.checkServers();
-    }, 5000);
-  },
-
-  methods: {
-    async checkServers() {
-      Object.entries(this.servers).forEach(async (server) => {
-        server = server[1];
-
-        if (server.type !== "truenas-scale") {
-          return;
-        }
-
-        const data = {
-          graphs: [
-            { name: "cputemp" },
-            { name: "memory" },
-            { name: "load" },
-            { name: "uptime" },
-          ],
-          reporting_query: {
-            start: Math.floor(Date.now() / 1000),
-          },
-        };
-
-        const response = await fetch(
-          `http://${server.host}:${server.port ?? 80}/api/v2.0/reporting/get_data`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${server.key}`,
-            },
-            body: JSON.stringify(data),
-          }
-        )
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-          });
-      });
-    },
-  },
-};
+});
 </script>
