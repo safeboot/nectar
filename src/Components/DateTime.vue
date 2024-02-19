@@ -104,7 +104,11 @@ export default {
       }
     },
     async getWeather() {
-      if (!this.settings.weather.enabled) {
+      if (
+        !this.settings.weather.enabled ||
+        this.settings.weather.location.latitude === null ||
+        this.settings.weather.location.longitude === null
+      ) {
         return;
       }
       await fetch(

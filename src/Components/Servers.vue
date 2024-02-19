@@ -1,6 +1,6 @@
 <template>
   <div class="servers-container flex flex-col gap-2">
-    <h1 class="text-xl text-gray-100">My Servers</h1>
+    <h1 class="text-xl text-gray-100">Servers</h1>
     <div class="servers grid md:grid-cols-3 gap-2 md:gap-6">
       <a
         :href="'https://' + server.host + ':' + (server.port ?? 443)"

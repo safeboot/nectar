@@ -1,8 +1,8 @@
 <template>
   <div class="apps-container flex flex-col gap-2">
-    <div class="flex justify-between items-end">
-      <h1 class="text-xl text-gray-100">My Apps</h1>
-      <div class="flex items-end gap-2">
+    <div class="flex flex-col md:flex-row justify-between md:items-end">
+      <h1 class="text-xl text-gray-100">Apps</h1>
+      <div class="flex justify-between md:justify-end items-center md:items-end gap-2">
         <select
           v-model="server"
           @change="filterApps"
