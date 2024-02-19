@@ -23,5 +23,16 @@
             "url": "http://192.168.1.10:32400",
             "icon": "https://media.sys.truenas.net/apps/plex/icons/icon.png"
         }
+    },
+    "bookmarks": {
+        "GitHub": {
+            "url": "https://github.com",
+            "category": "Dev. Stuff"
+        },
+        "Laracasts": {
+            "url": "https://laracasts.com",
+            "category": "Courses",
+            "icon": "https://laracasts.com/favicons/favicon-96x96.png"
+        }
     }
 }
