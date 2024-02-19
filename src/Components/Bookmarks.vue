@@ -23,15 +23,17 @@
           v-model="search"
           placeholder="Search..."
           @change="filterBookmarks"
-          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-transparent rounded-lg focus:border-sky-300 transition-all duration-300"
+          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-transparent rounded-lg focus:border-orange-300 transition-all duration-300"
         />
       </div>
     </div>
-    <div class="bookmarks grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+    <div
+      class="bookmarks grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-6"
+    >
       <a
         :href="bookmark.url"
         target="_blank"
-        class="bookmark group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-sky-500/50 hover:border-pink-400 hover:shadow-lg transition duration-300"
+        class="bookmark group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex flex-col gap-2 rounded-xl shadow-md overflow-hidden active:shadow-orange-400/50 active:shadow-lg hover:border-orange-300 hover:shadow-lg transition duration-300"
         v-for="(bookmark, name, index) in filteredBookmarks"
         :key="name"
         v-motion="{
@@ -47,7 +49,7 @@
         }"
       >
         <div
-          class="icon size-11 md:size-12 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
+          class="icon size-12 md:size-14 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
         >
           <img
             :src="
