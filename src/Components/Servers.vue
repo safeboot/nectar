@@ -5,7 +5,7 @@
       <a
         :href="'https://' + server.host + ':' + (server.port ?? 443)"
         target="_blank"
-        class="server backdrop-blur-md border border-gray-500/50 p-4 flex flex-col gap-4 rounded-xl shadow-md overflow-hidden active:shadow-purple-500/50 hover:border-sky-400 hover:shadow-lg transition duration-300"
+        class="server backdrop-blur-md border border-gray-500/50 p-4 flex flex-col gap-4 rounded-xl shadow-md overflow-hidden active:shadow-blue-500/50 active:shadow-lg hover:border-sky-400 hover:shadow-lg transition duration-300"
         v-for="(server, name, index) in servers"
         :key="name"
         v-motion="{

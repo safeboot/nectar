@@ -27,11 +27,11 @@
         />
       </div>
     </div>
-    <div class="apps grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+    <div class="apps grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
       <a
         :href="app.url"
         target="_blank"
-        class="app group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-sky-500/50 hover:border-pink-400 hover:shadow-lg transition duration-300"
+        class="app group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-pink-500/50 active:shadow-lg hover:border-pink-400 hover:shadow-lg transition duration-300"
         v-for="(app, name, index) in filteredApps"
         :key="name"
         v-motion="{
