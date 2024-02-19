@@ -51,7 +51,7 @@ Then create a folder called `wallpapers` inside the `public` folder and place yo
 And that's it! You're all set up and ready to go.
 
 ## Roadmap
-- [ ] Add bookmarks panel
+- [x] Add bookmarks panel
 - [ ] Adjust config through the UI
 - [ ] Wallpaper picker
 - [ ] Docker support
