@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vueuse/motion": "^2.0.0",
+    "@vueuse/motion": "^2.1.0",
     "defu": "^6.1.4",
     "vue": "^3.4.15"
   },
