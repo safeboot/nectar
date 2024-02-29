@@ -11,7 +11,7 @@
   "dependencies": {
     "@vueuse/motion": "^2.1.0",
     "defu": "^6.1.4",
-    "vue": "^3.4.20"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
