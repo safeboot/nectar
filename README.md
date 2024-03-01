@@ -57,5 +57,7 @@ And that's it! You're all set up and ready to go.
 - [ ] Docker support
 - [ ] Demo Page
 
+> As you know, this project is built with Vite and Vue. However I am having reservations about this tech stack, Vue is staying, however I am thinking of moving to Node.js and Express so that it can be considered a "full-stack" project. Also at the moment I am considering integrating SQLite rather than JSON so that you can edit and manage within the UI.
+
 ## License
 Licensed under the Apache License, Version 2.0. Check the [LICENSE](LICENSE.md) file for more information.
