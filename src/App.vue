@@ -6,14 +6,14 @@
       <div class="main w-full max-w-6xl h-full py-16 flex flex-col gap-12">
         <DateTime />
 
-        <Servers v-if="'servers' in config" />
+        <Servers />
 
-        <Apps v-if="'apps' in config" />
+        <Apps />
 
-        <Bookmarks v-if="'bookmarks' in config" />
+        <Bookmarks />
       </div>
     </div>
-    <p class="absolute md:fixed top-4 left-4 text-xl text-white/50 z-20">nectar.</p>
+    <p class="absolute xl:fixed top-4 left-4 text-xl text-white/50 z-20">nectar.</p>
   </div>
   <div
     class="wallpaper fixed top-0 left-0 w-full min-h-screen bg-cover bg-center -z-10"
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import json from "../config.json";
 import DateTime from "./Components/DateTime.vue";
 import Servers from "./Components/Servers.vue";
 import Apps from "./Components/Apps.vue";
@@ -33,12 +32,6 @@ export default {
     Servers,
     Apps,
     Bookmarks,
-  },
-
-  data() {
-    return {
-      config: json,
-    };
   },
 
   mounted() {

@@ -1,24 +1,18 @@
 <template>
-  <div class="servers-container flex flex-col gap-2">
+  <div class="servers-container flex flex-col gap-2" v-if="servers.length">
     <h1 class="text-xl text-gray-100">Servers</h1>
     <div class="servers grid md:grid-cols-3 gap-2 md:gap-6">
       <a
         :href="'https://' + server.host + ':' + (server.port ?? 443)"
         target="_blank"
         class="server backdrop-blur-md border border-gray-500/50 p-4 flex flex-col gap-4 rounded-xl shadow-md overflow-hidden active:shadow-blue-500/50 active:shadow-lg hover:border-sky-400 hover:shadow-lg transition duration-300"
-        v-for="(server, name, index) in servers"
-        :key="name"
-        v-motion="{
-          initial: {
-            opacity: 0,
-          },
-          enter: {
-            opacity: 1,
-            transition: {
-              delay: index * 100,
-            },
-          },
-        }"
+        v-for="(server, index) in servers"
+        :key="index"
+        v-motion
+        :initial="{ opacity: 0, y: 10 }"
+        :enter="{ opacity: 1, y: 0, scale: 1 }"
+        :hovered="{ scale: 1.025 }"
+        :delay="index * 50"
       >
         <div class="server-details flex items-center gap-4">
           <svg
@@ -37,7 +31,7 @@
           </svg>
           <div class="flex flex-col">
             <div class="flex items-center gap-2">
-              <h1 class="text-white text-lg font-medium">{{ name }}</h1>
+              <h1 class="text-white text-lg font-medium">{{ server.name }}</h1>
               <div class="size-2 bg-purple-400 rounded-full"></div>
             </div>
             <p class="text-sm text-gray-200">
@@ -98,13 +92,25 @@
 </template>
 
 <script>
-import * as json from "../../config.json";
-
 export default {
   data() {
     return {
-      servers: json.servers,
+      servers: [],
     };
+  },
+
+  mounted() {
+    this.getServers();
+  },
+
+  methods: {
+    async getServers() {
+      await fetch("/api/servers")
+        .then((response) => response.json())
+        .then((data) => {
+          this.servers = data;
+        });
+    },
   },
 };
 </script>

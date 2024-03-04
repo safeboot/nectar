@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmarks-container flex flex-col gap-2">
+  <div class="bookmarks-container flex flex-col gap-2" v-if="bookmarks.length">
     <div class="flex flex-col md:flex-row justify-between md:items-end">
       <h1 class="text-xl text-gray-100">Bookmarks</h1>
       <div class="flex justify-between md:justify-end items-center md:items-end gap-2">
@@ -10,12 +10,12 @@
         >
           <option value="null" class="bg-neutral-700">All Bookmarks</option>
           <option
-            :value="name"
-            v-for="(bookmark, name) in categories"
-            :key="name"
+            :value="category.id"
+            v-for="(category, index) in categories"
+            :key="index"
             class="bg-neutral-700"
           >
-            {{ name }}
+            {{ category.name }}
           </option>
         </select>
         <input
@@ -34,19 +34,13 @@
         :href="bookmark.url"
         target="_blank"
         class="bookmark group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex flex-col gap-2 rounded-xl shadow-md overflow-hidden active:shadow-orange-400/50 active:shadow-lg hover:border-orange-300 hover:shadow-lg transition duration-300"
-        v-for="(bookmark, name, index) in filteredBookmarks"
-        :key="name"
-        v-motion="{
-          initial: {
-            opacity: 0,
-          },
-          enter: {
-            opacity: 1,
-            transition: {
-              delay: index * 25,
-            },
-          },
-        }"
+        v-for="(bookmark, index) in filteredBookmarks"
+        :key="index"
+        v-motion
+        :initial="{ opacity: 0, y: 10 }"
+        :enter="{ opacity: 1, y: 0, scale: 1 }"
+        :hovered="{ scale: 1.025 }"
+        :delay="index * 50"
       >
         <div
           class="icon size-12 md:size-14 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
@@ -60,9 +54,11 @@
           />
         </div>
         <div class="flex flex-col">
-          <h1 class="text-white md:text-lg font-medium line-clamp-1">{{ name }}</h1>
+          <h1 class="text-white md:text-lg font-medium line-clamp-1">
+            {{ bookmark.name }}
+          </h1>
           <p class="text-sm text-gray-200">
-            {{ bookmark.category }}
+            {{ bookmark.category_name }}
           </p>
         </div>
       </a>
@@ -77,13 +73,11 @@
 </template>
 
 <script>
-import * as json from "../../config.json";
-
 export default {
   data() {
     return {
-      bookmarks: json.bookmarks,
-      filteredBookmarks: json.bookmarks,
+      bookmarks: [],
+      filteredBookmarks: [],
       categories: [],
       category: null,
       search: "",
@@ -91,14 +85,33 @@ export default {
   },
 
   mounted() {
+    this.getBookmarkCategories();
+    this.getBookmarks();
     this.filterBookmarks();
 
     this.categories = Object.fromEntries(
-      Object.entries(this.bookmarks).map(([name, bookmark]) => [bookmark.category, true])
+      Object.entries(this.bookmarks).map(([index, bookmark]) => [bookmark.category, true])
     );
   },
 
   methods: {
+    async getBookmarkCategories() {
+      await fetch("/api/bookmark_categories")
+        .then((response) => response.json())
+        .then((data) => {
+          this.categories = data;
+        });
+    },
+
+    async getBookmarks() {
+      await fetch("/api/bookmarks")
+        .then((response) => response.json())
+        .then((data) => {
+          this.bookmarks = data;
+          this.filteredBookmarks = data;
+        });
+    },
+
     filterBookmarks() {
       this.filteredBookmarks = this.bookmarks;
       if ((this.category === null || this.category === "null") && this.search === "") {
@@ -110,15 +123,15 @@ export default {
       if (this.category && this.category !== "null") {
         bookmarks = Object.fromEntries(
           Object.entries(bookmarks).filter(
-            ([name, bookmark]) => bookmark.category === this.category
+            ([index, bookmark]) => bookmark.category_id === this.category
           )
         );
       }
 
       if (this.search && this.search !== "") {
         bookmarks = Object.fromEntries(
-          Object.entries(bookmarks).filter(([name]) =>
-            name.toLowerCase().includes(this.search.toLowerCase())
+          Object.entries(bookmarks).filter(([index, bookmark]) =>
+            bookmark.name.toLowerCase().includes(this.search.toLowerCase())
           )
         );
       }

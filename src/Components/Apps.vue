@@ -1,5 +1,5 @@
 <template>
-  <div class="apps-container flex flex-col gap-2">
+  <div class="apps-container flex flex-col gap-2" v-if="apps.length">
     <div class="flex flex-col md:flex-row justify-between md:items-end">
       <h1 class="text-xl text-gray-100">Apps</h1>
       <div class="flex justify-between md:justify-end items-center md:items-end gap-2">
@@ -10,12 +10,12 @@
         >
           <option value="null" class="bg-neutral-700">All Servers</option>
           <option
-            :value="name"
-            v-for="(server, name) in servers"
-            :key="name"
+            :value="server.id"
+            v-for="(server, index) in servers"
+            :key="index"
             class="bg-neutral-700"
           >
-            {{ name }}
+            {{ server.name }}
           </option>
         </select>
         <input
@@ -32,19 +32,13 @@
         :href="app.url"
         target="_blank"
         class="app group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-pink-500/50 active:shadow-lg hover:border-pink-400 hover:shadow-lg transition duration-300"
-        v-for="(app, name, index) in filteredApps"
-        :key="name"
-        v-motion="{
-          initial: {
-            opacity: 0,
-          },
-          enter: {
-            opacity: 1,
-            transition: {
-              delay: index * 25,
-            },
-          },
-        }"
+        v-for="(app, index) in filteredApps"
+        :key="index"
+        v-motion
+        :initial="{ opacity: 0, y: 10 }"
+        :enter="{ opacity: 1, y: 0, scale: 1 }"
+        :hovered="{ scale: 1.025 }"
+        :delay="index * 50"
       >
         <div
           class="icon size-11 md:size-12 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
@@ -52,9 +46,9 @@
           <img :src="app.icon" class="w-full h-full object-contain rounded-sm" />
         </div>
         <div class="flex flex-col">
-          <h1 class="text-white md:text-lg font-medium line-clamp-1">{{ name }}</h1>
+          <h1 class="text-white md:text-lg font-medium line-clamp-1">{{ app.name }}</h1>
           <p class="text-sm text-gray-200">
-            {{ app.server }}
+            {{ app.server_name }}
           </p>
         </div>
       </a>
@@ -69,24 +63,41 @@
 </template>
 
 <script>
-import * as json from "../../config.json";
-
 export default {
   data() {
     return {
-      apps: json.apps,
-      filteredApps: json.apps,
-      servers: json.servers,
+      apps: [],
+      filteredApps: [],
+      servers: [],
       server: null,
       search: "",
     };
   },
 
   mounted() {
+    this.getServers();
+    this.getApps();
     this.filterApps();
   },
 
   methods: {
+    async getServers() {
+      await fetch("/api/servers")
+        .then((response) => response.json())
+        .then((data) => {
+          this.servers = data;
+        });
+    },
+
+    async getApps() {
+      await fetch("/api/apps")
+        .then((response) => response.json())
+        .then((data) => {
+          this.apps = data;
+          this.filteredApps = data;
+        });
+    },
+
     filterApps() {
       this.filteredApps = this.apps;
       if ((this.server === null || this.server === "null") && this.search === "") {
@@ -97,14 +108,14 @@ export default {
 
       if (this.server && this.server !== "null") {
         apps = Object.fromEntries(
-          Object.entries(apps).filter(([name, app]) => app.server === this.server)
+          Object.entries(apps).filter(([name, app]) => app.server_id === this.server)
         );
       }
 
       if (this.search && this.search !== "") {
         apps = Object.fromEntries(
-          Object.entries(apps).filter(([name]) =>
-            name.toLowerCase().includes(this.search.toLowerCase())
+          Object.entries(apps).filter(([name, app]) =>
+            app.name.toLowerCase().includes(this.search.toLowerCase())
           )
         );
       }

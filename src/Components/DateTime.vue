@@ -6,26 +6,22 @@
           time.minute.toString().padStart(2, "0")
         }}:{{ time.second.toString().padStart(2, "0") }}
       </h1>
-      <div
+      <!-- <div
         class="flex items-start gap-2"
         v-if="settings.weather.enabled && weather.temperature !== null"
-        v-motion-fade
       >
         <img :src="getWeatherIcon()" class="w-8" />
         <p class="text-white text-xl">{{ weather.temperature }}°C</p>
-      </div>
+      </div> -->
     </div>
     <p class="text-white md:text-2xl transition-all duration-300">{{ date }}</p>
   </div>
 </template>
 
 <script>
-import * as json from "../../config.json";
-
 export default {
   data() {
     return {
-      settings: json.settings,
       days: [
         "Sunday",
         "Monday",
@@ -65,7 +61,7 @@ export default {
 
   mounted() {
     this.updateDateTime();
-    this.getWeather();
+    //this.getWeather();
 
     setInterval(this.getWeather, 60000);
   },
