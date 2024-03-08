@@ -29,6 +29,23 @@ CREATE TABLE "apps" (
   CONSTRAINT "apps_server_id" FOREIGN KEY ("server_id") REFERENCES "servers" ("id") ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS "settings";
+CREATE TABLE "settings" (
+  "name" TEXT NOT NULL,
+  "value" TEXT NOT NULL,
+  PRIMARY KEY ("name")
+);
+
+BEGIN;
+INSERT INTO "settings" ("name", "value") VALUES ("time.time_format", '12h');
+COMMIT;
+
+BEGIN;
+INSERT INTO "settings" ("name", "value") VALUES ("weather.enabled", 'true');
+INSERT INTO "settings" ("name", "value") VALUES ("weather.location.latitude", '43.33728837061606');
+INSERT INTO "settings" ("name", "value") VALUES ("weather.location.longitude", '17.81504925295707');
+COMMIT;
+
 -- ----------------------------
 -- Records of apps
 -- ----------------------------

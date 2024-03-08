@@ -7,7 +7,7 @@ db.pragma('journal_mode = WAL');
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
-const port = process.env.PORT || 5173
+const port = process.env.PORT || 1753
 const base = process.env.BASE || '/'
 
 // Cached production assets
@@ -58,6 +58,14 @@ app.use('/api/bookmark_categories', (req, res) => {
   res.json(stmt.all());
 });
 
+app.use('/api/settings', (req, res) => {
+  const stmt = db.prepare('SELECT * FROM settings');
+  res.json(stmt.all());
+});
+
+// Serve static files
+app.use('/public', express.static('public'))
+
 // Serve HTML
 app.use('*', async (req, res) => {
   try {
@@ -88,6 +96,7 @@ app.use('*', async (req, res) => {
     res.status(500).end(e.stack)
   }
 })
+
 
 // Start http server
 app.listen(port, () => {
