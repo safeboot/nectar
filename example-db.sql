@@ -38,9 +38,6 @@ CREATE TABLE "settings" (
 
 BEGIN;
 INSERT INTO "settings" ("name", "value") VALUES ("time.time_format", '12h');
-COMMIT;
-
-BEGIN;
 INSERT INTO "settings" ("name", "value") VALUES ("weather.enabled", 'true');
 INSERT INTO "settings" ("name", "value") VALUES ("weather.location.latitude", '43.33728837061606');
 INSERT INTO "settings" ("name", "value") VALUES ("weather.location.longitude", '17.81504925295707');
