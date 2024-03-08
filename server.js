@@ -18,6 +18,7 @@ const ssrManifest = isProduction
   ? await fs.readFile('./dist/client/.vite/ssr-manifest.json', 'utf-8')
   : undefined
 
+  
 // Create http server
 const app = express()
 
