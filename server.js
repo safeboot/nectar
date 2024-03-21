@@ -7,7 +7,7 @@ db.pragma('journal_mode = WAL');
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
-const port = process.env.PORT || 5173
+const port = process.env.PORT || 1753
 const base = process.env.BASE || '/'
 
 // Cached production assets
@@ -18,6 +18,7 @@ const ssrManifest = isProduction
   ? await fs.readFile('./dist/client/.vite/ssr-manifest.json', 'utf-8')
   : undefined
 
+  
 // Create http server
 const app = express()
 
@@ -57,6 +58,14 @@ app.use('/api/bookmark_categories', (req, res) => {
   const stmt = db.prepare('SELECT * FROM bookmark_categories');
   res.json(stmt.all());
 });
+
+app.use('/api/settings', (req, res) => {
+  const stmt = db.prepare('SELECT * FROM settings');
+  res.json(stmt.all());
+});
+
+// Serve static files
+app.use('/public', express.static('public'))
 
 // Serve HTML
 app.use('*', async (req, res) => {
