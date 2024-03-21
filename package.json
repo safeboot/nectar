@@ -14,7 +14,7 @@
     "@vueuse/motion": "^2.1.0",
     "better-sqlite3": "^9.4.3",
     "defu": "^6.1.4",
-    "express": "^4.18.3",
+    "express": "^4.19.1",
     "vue": "^3.4.21"
   },
   "devDependencies": {
