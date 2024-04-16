@@ -15,7 +15,7 @@
     "better-sqlite3": "^9.4.3",
     "defu": "^6.1.4",
     "express": "^4.19.2",
-    "vue": "^3.4.21"
+    "vue": "^3.4.22"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
