@@ -5,6 +5,8 @@ import Database from 'better-sqlite3';
 const db = new Database('nectar.db', { verbose: console.log });
 db.pragma('journal_mode = WAL');
 
+import bodyParser from 'body-parser';
+
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 5173
@@ -20,6 +22,8 @@ const ssrManifest = isProduction
 
 // Create http server
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Add Vite or respective production middlewares
 let vite
@@ -38,22 +42,41 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }))
 }
 
-app.use('/api/apps', (req, res) => {
+app.get('/api/apps', (req, res) => {
   const stmt = db.prepare('SELECT apps.name, apps.icon, apps.url, apps.server_id, servers.name as server_name FROM apps INNER JOIN servers ON apps.server_id = servers.id');
   res.json(stmt.all());
 });
 
-app.use('/api/servers', (req, res) => {
+app.get('/api/servers', (req, res) => {
   const stmt = db.prepare('SELECT * FROM servers');
   res.json(stmt.all());
 });
 
-app.use('/api/bookmarks', (req, res) => {
+app.post('/api/servers', (req, res) => {
+  const data = req.body;
+  if (data.id) {
+    const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ? WHERE id = ?');
+    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.id);
+  } else {
+    const stmt = db.prepare('INSERT INTO servers (name, host, port) VALUES (?, ?, ?)');
+    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port));
+  }
+
+  res.json({ success: true });
+});
+
+app.delete('/api/servers/:id', (req, res) => {
+  const stmt = db.prepare('DELETE FROM servers WHERE id = ?');
+  stmt.run(req.params.id);
+  res.json({ success: true });
+});
+
+app.get('/api/bookmarks', (req, res) => {
   const stmt = db.prepare('SELECT bookmarks.name, bookmarks.url, bookmarks.icon, bookmarks.category_id, bookmark_categories.name as category_name FROM bookmarks INNER JOIN bookmark_categories ON bookmarks.category_id = bookmark_categories.id');
   res.json(stmt.all());
 });
 
-app.use('/api/bookmark_categories', (req, res) => {
+app.get('/api/bookmark_categories', (req, res) => {
   const stmt = db.prepare('SELECT * FROM bookmark_categories');
   res.json(stmt.all());
 });
