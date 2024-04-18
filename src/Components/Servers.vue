@@ -5,15 +5,9 @@
       <a
         :href="'https://' + server.host + ':' + (server.port ?? 443)"
         target="_blank"
-        class="server backdrop-blur-md border border-gray-500/50 p-4 flex flex-col gap-4 rounded-xl shadow-md overflow-hidden active:shadow-blue-500/50 active:shadow-lg hover:border-sky-400 hover:shadow-lg transition duration-300"
+        class="server bg-black/20 backdrop-blur-md border border-gray-500/50 p-4 flex flex-col gap-4 rounded-xl shadow-md overflow-hidden active:shadow-blue-500/50 active:shadow-lg hover:border-sky-400 hover:shadow-lg transition duration-300"
         v-for="(server, index) in servers"
         :key="index"
-        v-motion="{
-          initial: { opacity: 0, y: 10 },
-          enter: { opacity: 1, y: 0, scale: 1 },
-          hovered: { scale: 1.025 },
-          delay: (index + 1) * 50,
-        }"
       >
         <div class="server-details flex items-center gap-4">
           <svg
@@ -33,7 +27,7 @@
           <div class="flex flex-col">
             <div class="flex items-center gap-2">
               <h1 class="text-white text-lg font-medium">{{ server.name }}</h1>
-              <div class="size-2 bg-purple-400 rounded-full"></div>
+              <!-- <div class="size-2 bg-purple-400 rounded-full"></div> -->
             </div>
             <p class="text-sm text-gray-200">
               {{ server.host }}{{ server.port ? ":" + server.port : "" }}
@@ -111,6 +105,11 @@ export default {
         .then((data) => {
           this.servers = data;
         });
+    },
+
+    refresh() {
+      this.servers = [];
+      this.getServers();
     },
   },
 };

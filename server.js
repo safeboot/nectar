@@ -43,8 +43,27 @@ if (!isProduction) {
 }
 
 app.get('/api/apps', (req, res) => {
-  const stmt = db.prepare('SELECT apps.name, apps.icon, apps.url, apps.server_id, servers.name as server_name FROM apps INNER JOIN servers ON apps.server_id = servers.id');
+  const stmt = db.prepare('SELECT apps.id, apps.name, apps.icon, apps.url, apps.server_id, servers.name as server_name FROM apps INNER JOIN servers ON apps.server_id = servers.id');
   res.json(stmt.all());
+});
+
+app.post('/api/apps', (req, res) => {
+  const data = req.body;
+  if (data.id) {
+    const stmt = db.prepare('UPDATE apps SET name = ?, icon = ?, url = ?, server_id = ? WHERE id = ?');
+    stmt.run(data.name, data.icon, data.url, data.server_id, data.id);
+  } else {
+    const stmt = db.prepare('INSERT INTO apps (name, icon, url, server_id) VALUES (?, ?, ?, ?)');
+    stmt.run(data.name, data.icon, data.url, data.server_id);
+  }
+
+  res.json({ success: true });
+});
+
+app.delete('/api/apps/:id', (req, res) => {
+  const stmt = db.prepare('DELETE FROM apps WHERE id = ?');
+  stmt.run(req.params.id);
+  res.json({ success: true });
 });
 
 app.get('/api/servers', (req, res) => {
@@ -72,13 +91,55 @@ app.delete('/api/servers/:id', (req, res) => {
 });
 
 app.get('/api/bookmarks', (req, res) => {
-  const stmt = db.prepare('SELECT bookmarks.name, bookmarks.url, bookmarks.icon, bookmarks.category_id, bookmark_categories.name as category_name FROM bookmarks INNER JOIN bookmark_categories ON bookmarks.category_id = bookmark_categories.id');
+  const stmt = db.prepare('SELECT bookmarks.id, bookmarks.name, bookmarks.url, bookmarks.icon, bookmarks.category_id, bookmark_categories.name as category_name FROM bookmarks INNER JOIN bookmark_categories ON bookmarks.category_id = bookmark_categories.id');
   res.json(stmt.all());
+});
+
+app.post('/api/bookmarks', (req, res) => {
+  const data = req.body;
+  if (data.icon == 'null' || data.icon == '') {
+    data.icon = null;
+  }
+  
+  if (data.id) {
+    const stmt = db.prepare('UPDATE bookmarks SET name = ?, url = ?, icon = ?, category_id = ? WHERE id = ?');
+    stmt.run(data.name, data.url, data.icon, data.category_id, data.id);
+  } else {
+    const stmt = db.prepare('INSERT INTO bookmarks (name, url, icon, category_id) VALUES (?, ?, ?, ?)');
+    stmt.run(data.name, data.url, data.icon, data.category_id);
+  }
+
+  res.json({ success: true });
+});
+
+app.delete('/api/bookmarks/:id', (req, res) => {
+  const stmt = db.prepare('DELETE FROM bookmarks WHERE id = ?');
+  stmt.run(req.params.id);
+  res.json({ success: true });
 });
 
 app.get('/api/bookmark_categories', (req, res) => {
   const stmt = db.prepare('SELECT * FROM bookmark_categories');
   res.json(stmt.all());
+});
+
+app.post('/api/bookmark_categories', (req, res) => {
+  const data = req.body;
+  if (data.id) {
+    const stmt = db.prepare('UPDATE bookmark_categories SET name = ? WHERE id = ?');
+    stmt.run(data.name, data.id);
+  } else {
+    const stmt = db.prepare('INSERT INTO bookmark_categories (name) VALUES (?)');
+    stmt.run(data.name);
+  }
+
+  res.json({ success: true });
+});
+
+app.delete('/api/bookmark_categories/:id', (req, res) => {
+  const stmt = db.prepare('DELETE FROM bookmark_categories WHERE id = ?');
+  stmt.run(req.params.id);
+  res.json({ success: true });
 });
 
 // Serve HTML

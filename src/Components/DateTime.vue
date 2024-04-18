@@ -63,7 +63,8 @@ export default {
     this.updateDateTime();
     //this.getWeather();
 
-    setInterval(this.getWeather, 60000);
+    // Get the weather every 5 minutes.
+    // setInterval(this.getWeather, 300000);
   },
 
   methods: {

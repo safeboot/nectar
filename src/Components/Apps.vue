@@ -6,7 +6,7 @@
         <select
           v-model="server"
           @change="filterApps"
-          class="form-select w-32 h-8 appearence-none bg-transparent text-white px-1 py-0 outline-none border-transparent rounded-lg focus:border-sky-300 transition-all duration-300"
+          class="form-select w-32 h-8 appearence-none bg-transparent text-white px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-sky-300 transition-all duration-300"
         >
           <option value="null" class="bg-neutral-700">All Servers</option>
           <option
@@ -23,7 +23,7 @@
           v-model="search"
           placeholder="Search..."
           @change="filterApps"
-          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-transparent rounded-lg focus:border-sky-300 transition-all duration-300"
+          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-sky-300 transition-all duration-300"
         />
       </div>
     </div>
@@ -31,14 +31,9 @@
       <a
         :href="app.url"
         target="_blank"
-        class="app group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-pink-500/50 active:shadow-lg hover:border-pink-400 hover:shadow-lg transition duration-300"
+        class="app group bg-black/20 backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex items-center gap-4 rounded-xl shadow-md overflow-hidden active:shadow-pink-500/50 active:shadow-lg hover:border-pink-400 hover:shadow-lg transition duration-300"
         v-for="(app, index) in filteredApps"
         :key="index"
-        v-motion
-        :initial="{ opacity: 0, y: 10 }"
-        :enter="{ opacity: 1, y: 0, scale: 1 }"
-        :hovered="{ scale: 1.025 }"
-        :delay="index * 50"
       >
         <div
           class="icon size-11 md:size-12 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
@@ -121,6 +116,14 @@ export default {
       }
 
       this.filteredApps = apps;
+    },
+
+    refresh() {
+      this.servers = [];
+      this.apps = [];
+      this.getServers();
+      this.getApps();
+      this.filterApps();
     },
   },
 };

@@ -6,7 +6,7 @@
         <select
           v-model="category"
           @change="filterBookmarks"
-          class="form-select w-40 h-8 appearence-none bg-transparent text-white px-1 py-0 outline-none border-transparent rounded-lg focus:border-sky-300 transition-all duration-300"
+          class="form-select w-40 h-8 appearence-none bg-transparent text-white px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-orange-300 transition-all duration-300"
         >
           <option value="null" class="bg-neutral-700">All Bookmarks</option>
           <option
@@ -23,7 +23,7 @@
           v-model="search"
           placeholder="Search..."
           @change="filterBookmarks"
-          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-transparent rounded-lg focus:border-orange-300 transition-all duration-300"
+          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-orange-300 transition-all duration-300"
         />
       </div>
     </div>
@@ -33,14 +33,9 @@
       <a
         :href="bookmark.url"
         target="_blank"
-        class="bookmark group backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex flex-col gap-2 rounded-xl shadow-md overflow-hidden active:shadow-orange-400/50 active:shadow-lg hover:border-orange-300 hover:shadow-lg transition duration-300"
+        class="bookmark group bg-black/20 backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex flex-col gap-2 rounded-xl shadow-md overflow-hidden active:shadow-orange-400/50 active:shadow-lg hover:border-orange-300 hover:shadow-lg transition duration-300"
         v-for="(bookmark, index) in filteredBookmarks"
         :key="index"
-        v-motion
-        :initial="{ opacity: 0, y: 10 }"
-        :enter="{ opacity: 1, y: 0, scale: 1 }"
-        :hovered="{ scale: 1.025 }"
-        :delay="index * 50"
       >
         <div
           class="icon size-12 md:size-14 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
@@ -137,6 +132,22 @@ export default {
       }
 
       this.filteredBookmarks = bookmarks;
+    },
+
+    refresh() {
+      this.bookmarks = [];
+      this.categories = [];
+
+      this.getBookmarkCategories();
+      this.getBookmarks();
+      this.filterBookmarks();
+
+      this.categories = Object.fromEntries(
+        Object.entries(this.bookmarks).map(([index, bookmark]) => [
+          bookmark.category,
+          true,
+        ])
+      );
     },
   },
 };

@@ -6,15 +6,15 @@
       <div class="main w-full max-w-6xl h-full py-16 flex flex-col gap-12">
         <DateTime />
 
-        <Servers />
+        <Servers ref="servers" />
 
-        <Apps />
+        <Apps ref="apps" />
 
-        <Bookmarks />
+        <Bookmarks ref="bookmarks" />
       </div>
     </div>
     <div
-      class="absolute xl:fixed top-4 left-0 w-full px-4 flex justify-between items-center"
+      class="absolute xl:fixed top-4 left-0 w-full px-4 flex justify-between items-center xl:z-50"
     >
       <p class="text-xl text-white/50 z-50">nectar.</p>
       <button
@@ -46,7 +46,7 @@
   <div
     class="wallpaper fixed top-0 left-0 w-full min-h-screen bg-cover bg-center -z-10"
   ></div>
-  <Settings ref="settings" />
+  <Settings ref="settings" @updated-settings="refresh" />
 </template>
 
 <script>
@@ -75,6 +75,14 @@ export default {
     if (wallpaper) {
       wallpaper.style.backgroundImage = `url('${wallpapers[season][0]}')`;
     }
+  },
+
+  methods: {
+    refresh() {
+      this.$refs.servers.refresh();
+      this.$refs.apps.refresh();
+      this.$refs.bookmarks.refresh();
+    },
   },
 };
 </script>
