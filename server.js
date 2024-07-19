@@ -49,7 +49,7 @@ app.get('/api/apps', (req, res) => {
 
 app.post('/api/apps', (req, res) => {
   const data = req.body;
-  if (data.id) {
+  if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE apps SET name = ?, icon = ?, url = ?, server_id = ? WHERE id = ?');
     stmt.run(data.name, data.icon, data.url, data.server_id, data.id);
   } else {
@@ -73,7 +73,7 @@ app.get('/api/servers', (req, res) => {
 
 app.post('/api/servers', (req, res) => {
   const data = req.body;
-  if (data.id) {
+  if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ? WHERE id = ?');
     stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.id);
   } else {
@@ -101,7 +101,7 @@ app.post('/api/bookmarks', (req, res) => {
     data.icon = null;
   }
   
-  if (data.id) {
+  if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE bookmarks SET name = ?, url = ?, icon = ?, category_id = ? WHERE id = ?');
     stmt.run(data.name, data.url, data.icon, data.category_id, data.id);
   } else {
@@ -125,7 +125,7 @@ app.get('/api/bookmark_categories', (req, res) => {
 
 app.post('/api/bookmark_categories', (req, res) => {
   const data = req.body;
-  if (data.id) {
+  if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE bookmark_categories SET name = ? WHERE id = ?');
     stmt.run(data.name, data.id);
   } else {
