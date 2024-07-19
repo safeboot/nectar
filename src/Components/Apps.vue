@@ -23,7 +23,7 @@
           v-model="search"
           placeholder="Search..."
           @change="filterApps"
-          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-sky-100/50 px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-sky-300 transition-all duration-300"
+          class="w-40 h-8 appearence-none bg-transparent text-white placeholder:text-pink-100/50 px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-pink-300 transition-all duration-300"
         />
       </div>
     </div>
