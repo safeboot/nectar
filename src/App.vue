@@ -3,7 +3,10 @@
     <div
       class="nectar-container w-full min-h-screen h-full bg-black/50 backdrop-blur-sm p-4 flex justify-center z-0"
     >
-      <div class="main w-full max-w-6xl h-full py-16 flex flex-col gap-12">
+      <div
+        class="main w-full max-w-6xl h-full py-16 flex flex-col gap-12"
+        :class="{ 'movement-player': movement }"
+      >
         <DateTime />
 
         <Servers ref="servers" />
@@ -21,7 +24,7 @@
         @click="$refs.settings.open = !$refs.settings.open"
         class="z-50 transition duration-300"
         :class="
-          $refs.settings
+          $refs.settings?.open
             ? 'rotate-180 text-pink-300 hover:text-pink-400'
             : 'text-white/50 hover:text-sky-300'
         "
@@ -45,6 +48,7 @@
   </div>
   <div
     class="wallpaper fixed top-0 left-0 w-full min-h-screen bg-cover bg-center -z-10"
+    ref="wallpaper"
   ></div>
   <Settings ref="settings" @updated-settings="refresh" />
 </template>
@@ -65,15 +69,17 @@ export default {
     Settings,
   },
 
+  data() {
+    return {
+      movement: true,
+    };
+  },
+
   mounted() {
-    const wallpapers = Object.entries(import.meta.glob("/public/wallpapers/*"));
+    this.setWallpaper();
 
-    const season = Math.floor((new Date().getMonth() + 1) / (12 / wallpapers.length));
-
-    const wallpaper = document.querySelector(".wallpaper");
-
-    if (wallpaper) {
-      wallpaper.style.backgroundImage = `url('${wallpapers[season][0]}')`;
+    if (localStorage.getItem("movement") === null) {
+      localStorage.setItem("movement", true);
     }
   },
 
@@ -82,7 +88,49 @@ export default {
       this.$refs.servers.refresh();
       this.$refs.apps.refresh();
       this.$refs.bookmarks.refresh();
+      this.setWallpaper();
+      this.movement = localStorage.getItem("movement") === "true";
+    },
+
+    setWallpaper() {
+      const mode = localStorage.getItem("wallpaper") ?? "auto";
+
+      const wallpapers = Object.entries(import.meta.glob("/public/wallpapers/*"));
+      const wallpaper = this.$refs.wallpaper;
+
+      if (mode === "auto") {
+        const season = Math.floor((new Date().getMonth() + 1) / (12 / wallpapers.length));
+
+        if (wallpaper) {
+          wallpaper.style.backgroundImage = `url('${wallpapers[season][0]}')`;
+        }
+      } else {
+        wallpaper.style.backgroundImage = `url('${wallpapers[mode][0]}')`;
+      }
     },
   },
 };
 </script>
+
+<style scoped>
+.movement-player {
+  animation: moveBackAndForth 20s ease infinite forwards;
+}
+
+.movement-player:hover {
+  animation-play-state: paused;
+}
+
+@keyframes moveBackAndForth {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(1%);
+  }
+  66% {
+    transform: translateX(-1%);
+  }
+}
+</style>

@@ -4,7 +4,7 @@
     :class="open ? 'opacity-100' : 'opacity-0'"
   >
     <div
-      class="settings-content w-full max-w-3xl h-auto max-h-full p-2 md:p-4 bg-neutral-900 border border-neutral-800 rounded-md shadow-2xl shadow-white/10 overflow-y-auto transition-all duration-300"
+      class="settings-content w-full max-w-5xl h-auto max-h-full p-2 md:p-6 bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl shadow-white/10 overflow-y-auto transition-all duration-300"
       :class="
         open
           ? 'opacity-100 translate-y-0 pointer-events-auto'
@@ -33,8 +33,59 @@
           </svg>
         </button>
       </div>
-      <div class="body flex flex-col divide-y divide-neutral-800">
-        <div class="servers py-4 flex flex-col gap-2" v-if="servers.length">
+
+      <div class="tabs relative py-2 grid grid-cols-2">
+        <button
+          @click="tab = 'content'"
+          class="tab p-2 flex justify-center items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5 text-white"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+            />
+          </svg>
+          <p class="text-white">Content</p>
+        </button>
+        <button
+          @click="tab = 'customization'"
+          class="tab p-2 flex justify-center items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5 text-white"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42"
+            />
+          </svg>
+          <p class="text-white">Customization</p>
+        </button>
+        <div
+          class="active-tab absolute bottom-0 w-1/2 h-0.5 transition-all duration-300"
+          :class="tab === 'content' ? 'left-0 bg-sky-300' : 'left-1/2 bg-pink-300'"
+        ></div>
+      </div>
+
+      <div
+        class="body flex flex-col divide-y divide-neutral-800"
+        v-if="tab === 'content'"
+      >
+        <div class="servers py-6 flex flex-col gap-2" v-if="servers.length">
           <div class="flex justify-between items-center">
             <h2 class="text-white/75">Servers</h2>
             <button
@@ -64,7 +115,7 @@
             <p class="text-gray-200 text-right">Actions</p>
           </div>
           <div
-            class="server mb-4 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
+            class="server mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
             v-for="(server, index) in servers"
             :key="index"
           >
@@ -130,7 +181,7 @@
         </div>
 
         <div
-          class="no-servers flex flex-col justify-center items-center gap-2 p-4"
+          class="no-servers flex flex-col justify-center items-center gap-2 p-6"
           v-if="!servers.length"
         >
           <p class="text-white/75">No servers found.</p>
@@ -157,7 +208,7 @@
           </button>
         </div>
 
-        <div class="apps py-4 flex flex-col gap-2" v-if="apps.length">
+        <div class="apps py-6 flex flex-col gap-2" v-if="apps.length">
           <div class="flex justify-between items-center">
             <h2 class="text-white/75">Apps</h2>
             <button
@@ -190,7 +241,7 @@
             <p class="text-gray-200 text-right">Actions</p>
           </div>
           <div
-            class="app mb-4 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
+            class="app mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
             v-for="(app, index) in apps"
             :key="index"
           >
@@ -252,7 +303,7 @@
         </div>
 
         <div
-          class="no-apps flex flex-col justify-center items-center gap-2 p-4"
+          class="no-apps flex flex-col justify-center items-center gap-2 p-6"
           v-if="!apps.length"
         >
           <p class="text-white/75">No apps found.</p>
@@ -279,7 +330,7 @@
           </button>
         </div>
 
-        <div class="bookmarks py-4 flex flex-col gap-2" v-if="bookmarks.length">
+        <div class="bookmarks py-6 flex flex-col gap-2" v-if="bookmarks.length">
           <div class="flex justify-between items-center">
             <h2 class="text-white/75">Bookmarks</h2>
             <button
@@ -318,7 +369,7 @@
             <p class="text-gray-200 text-right">Actions</p>
           </div>
           <div
-            class="bookmark mb-4 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
+            class="bookmark mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
             v-for="(bookmark, index) in bookmarks"
             :key="index"
           >
@@ -429,7 +480,7 @@
           </button>
         </div>
 
-        <div class="bookmarks py-4 flex flex-col gap-2" v-if="categories.length">
+        <div class="bookmarks pt-6 flex flex-col gap-2" v-if="categories.length">
           <div class="flex justify-between items-center">
             <h2 class="text-white/75">Bookmark Categories</h2>
             <button
@@ -462,7 +513,7 @@
             <p class="text-gray-200 text-right">Actions</p>
           </div>
           <div
-            class="category mb-4 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
+            class="category mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
             v-for="(category, index) in categories"
             :key="index"
           >
@@ -548,6 +599,74 @@
           </button>
         </div>
       </div>
+
+      <div
+        class="body flex flex-col divide-y divide-neutral-800"
+        v-if="tab === 'customization'"
+      >
+        <div class="burn-in-protection pb-6 flex flex-col">
+          <h2 class="text-white/75">Burn in Protection</h2>
+          <div class="mt-2 flex items-start sm:items-center gap-2">
+            <input
+              type="checkbox"
+              v-model="movement"
+              class="size-5 lg:size-4 mt-2 sm:mt-0 rounded-md"
+              @change="saveMovement()"
+              id="movement"
+            />
+            <label for="movement" class="text-gray-400"
+              >Enabling this will move the central section left and right slowly. This
+              "might" prevent burn-in.</label
+            >
+          </div>
+        </div>
+
+        <div
+          class="wallpapers py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2"
+          v-if="wallpapers.length"
+        >
+          <button
+            @click="saveWallpaper('auto')"
+            class="md:col-span-2 lg:col-span-3 w-full p-6 text-white border flex flex-col justify-center items-center gap-2 rounded-lg transition duration-300"
+            :class="
+              mode === 'auto' ? 'border-sky-300' : 'border-gray-700 hover:border-gray-500'
+            "
+          >
+            <div class="flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-5 text-white"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                />
+              </svg>
+              Auto
+            </div>
+            <p class="text-gray-400">
+              This mode will automatically cycle through wallpapers depending on the
+              calendar week/month.
+            </p>
+          </button>
+          <button
+            @click="saveWallpaper(index)"
+            class="wallpaper w-full h-auto aspect-video p-2 border rounded-lg overflow-hidden transition duration-300"
+            :class="
+              mode == index ? 'border-sky-300' : 'border-gray-700 hover:border-gray-500'
+            "
+            v-for="(wallpaper, index) in wallpapers"
+            :key="index"
+          >
+            <img :src="wallpaper[0]" class="w-full h-full object-cover rounded-sm" />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div
@@ -562,10 +681,14 @@ export default {
   data() {
     return {
       open: false,
+      tab: "content",
       servers: [],
       apps: [],
       bookmarks: [],
       categories: [],
+      wallpapers: [],
+      mode: "auto",
+      movement: true,
     };
   },
 
@@ -574,6 +697,8 @@ export default {
     this.getApps();
     this.getBookmarks();
     this.getCategories();
+    this.getWallpapers();
+    this.movement = localStorage.getItem("movement") === "true" || true;
   },
 
   methods: {
@@ -673,6 +798,7 @@ export default {
       });
 
       this.servers = this.servers.filter((s) => s !== server);
+      this.apps = this.apps.filter((a) => a.server_id !== server.id);
       this.$emit("updated-settings");
     },
 
@@ -730,6 +856,23 @@ export default {
       });
 
       this.categories = this.categories.filter((c) => c !== category);
+      this.bookmarks = this.bookmarks.filter((b) => b.category_id !== category.id);
+      this.$emit("updated-settings");
+    },
+
+    async getWallpapers() {
+      this.wallpapers = Object.entries(import.meta.glob("/public/wallpapers/*"));
+      this.mode = localStorage.getItem("wallpaper") || "auto";
+    },
+
+    async saveWallpaper(value) {
+      this.mode = value;
+      localStorage.setItem("wallpaper", this.mode);
+      this.$emit("updated-settings");
+    },
+
+    async saveMovement() {
+      localStorage.setItem("movement", this.movement);
       this.$emit("updated-settings");
     },
   },
