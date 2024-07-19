@@ -1,7 +1,7 @@
 {
   "name": "nectar",
   "private": true,
-  "version": "0.9.7",
+  "version": "0.9.9",
   "type": "module",
   "scripts": {
     "dev": "node server",
@@ -14,8 +14,11 @@
     "@vueuse/motion": "^2.1.0",
     "better-sqlite3": "^9.5.0",
     "body-parser": "^1.20.2",
+    "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
     "defu": "^6.1.4",
     "express": "^4.19.2",
+    "sirv": "^2.0.4",
     "vue": "^3.4.25"
   },
   "devDependencies": {
