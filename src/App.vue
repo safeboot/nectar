@@ -114,7 +114,7 @@ export default {
 
 <style scoped>
 .movement-player {
-  animation: moveBackAndForth 20s ease infinite forwards;
+  animation: moveBackAndForth 30s ease infinite forwards;
 }
 
 .movement-player:hover {
