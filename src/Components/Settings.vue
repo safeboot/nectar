@@ -625,6 +625,7 @@
           class="wallpapers py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2"
           v-if="wallpapers.length"
         >
+          <h2 class="text-white/75">Wallpapers</h2>
           <button
             @click="saveWallpaper('auto')"
             class="md:col-span-2 lg:col-span-3 w-full p-6 text-white border flex flex-col justify-center items-center gap-2 rounded-lg transition duration-300"
@@ -665,6 +666,39 @@
           >
             <img :src="wallpaper[0]" class="w-full h-full object-cover rounded-sm" />
           </button>
+        </div>
+
+        <div class="credits pt-6">
+          <h2 class="text-white/75">Credits</h2>
+          <ul class="text-gray-300 list-disc list-inside">
+            <li>
+              Weather Icons by
+              <a
+                href="https://bas.dev"
+                target="_blank"
+                class="text-gray-300 underline hover:text-white transition duration-300"
+                >Bas Milius</a
+              >
+            </li>
+            <li>
+              Icons by
+              <a
+                href="https://heroicons.com"
+                target="_blank"
+                class="text-gray-300 underline hover:text-white transition duration-300"
+                >Heroicons</a
+              >
+            </li>
+            <li>
+              Developed by
+              <a
+                href="https://github.com/safeboot"
+                target="_blank"
+                class="text-gray-300 underline hover:text-white transition duration-300"
+                >safeboot</a
+              >
+            </li>
+          </ul>
         </div>
       </div>
     </div>
