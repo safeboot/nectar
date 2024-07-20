@@ -6,13 +6,12 @@
           time.minute.toString().padStart(2, "0")
         }}:{{ time.second.toString().padStart(2, "0") }}
       </h1>
-      <!-- <div
-        class="flex items-start gap-2"
-        v-if="settings.weather.enabled && weather.temperature !== null"
-      >
-        <img :src="getWeatherIcon()" class="w-8" />
-        <p class="text-white text-xl">{{ weather.temperature }}°C</p>
-      </div> -->
+      <Transition>
+        <div class="flex items-center gap-2" v-if="weather.temperature !== null">
+          <p class="text-white text-xl">{{ weather.temperature }}°C</p>
+          <img :src="getWeatherIcon()" class="w-9" />
+        </div>
+      </Transition>
     </div>
     <p class="text-white md:text-2xl transition-all duration-300">{{ date }}</p>
   </div>
@@ -53,6 +52,8 @@ export default {
       },
       date: "",
       weather: {
+        latitude: null,
+        longitude: null,
         temperature: null,
         weatherCode: null,
       },
@@ -61,10 +62,10 @@ export default {
 
   mounted() {
     this.updateDateTime();
-    //this.getWeather();
+    this.getLocation();
+    this.getWeather();
 
-    // Get the weather every 5 minutes.
-    // setInterval(this.getWeather, 300000);
+    setInterval(this.getWeather, 300000);
   },
 
   methods: {
@@ -101,91 +102,140 @@ export default {
       }
     },
     async getWeather() {
-      if (
-        !this.settings.weather.enabled ||
-        this.settings.weather.location.latitude === null ||
-        this.settings.weather.location.longitude === null
-      ) {
+      if (navigator.geolocation) {
+        await this.getLocation();
+      } else {
         return;
       }
-      await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${this.settings.weather.location.latitude}&longitude=${this.settings.weather.location.longitude}&current=temperature_2m,weather_code`
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          this.weather.temperature = data.current.temperature_2m;
-          this.weather.weatherCode = data.current.weather_code;
-        });
+
+      if (this.weather.latitude !== null && this.weather.longitude !== null) {
+        await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${this.weather.latitude}&longitude=${this.weather.longitude}&current=temperature_2m,weather_code`
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            this.weather.temperature = data.current.temperature_2m;
+            this.weather.weatherCode = data.current.weather_code;
+          });
+      } else {
+        setTimeout(() => {
+          this.getWeather();
+        }, 5000);
+      }
     },
+
+    getLocation() {
+      if (!navigator.geolocation) {
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.weather.latitude = position.coords.latitude;
+        this.weather.longitude = position.coords.longitude;
+      });
+    },
+
     getWeatherIcon() {
+      const isDay = this.time.hour >= 6 && this.time.hour < 18;
+
       switch (this.weather.weatherCode) {
         case 0:
         case 1:
         case 2:
         case 3:
-          return "http://openweathermap.org/img/wn/01d@2x.png";
+          return this.getDayNightIcon();
           break;
 
         case 45:
         case 48:
-          return "http://openweathermap.org/img/wn/50d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/mist.svg";
           break;
 
         case 51:
         case 53:
         case 55:
-          return "http://openweathermap.org/img/wn/09d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/drizzle.svg";
           break;
 
         case 56:
         case 57:
-          return "http://openweathermap.org/img/wn/09d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/hail.svg";
           break;
 
         case 61:
         case 63:
         case 65:
-          return "http://openweathermap.org/img/wn/10d@2x.png";
+          return isDay
+            ? "https://basmilius.github.io/weather-icons/production/fill/all/partly-cloudy-day-rain.svg"
+            : "https://basmilius.github.io/weather-icons/production/fill/all/partly-cloudy-night-rain.svg";
           break;
 
         case 66:
         case 67:
-          return "http://openweathermap.org/img/wn/10d@2x.png";
+          return isDay
+            ? "https://basmilius.github.io/weather-icons/production/fill/all/partly-cloudy-day-sleet.svg"
+            : "https://basmilius.github.io/weather-icons/production/fill/all/partly-cloudy-night-sleet.svg";
           break;
 
         case 71:
         case 73:
         case 75:
-          return "http://openweathermap.org/img/wn/13d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/snow.svg";
           break;
 
         case 77:
-          return "http://openweathermap.org/img/wn/13d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/snow.svg";
           break;
 
         case 80:
         case 81:
         case 82:
-          return "http://openweathermap.org/img/wn/09d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/rain.svg";
           break;
 
         case 85:
         case 86:
-          return "http://openweathermap.org/img/wn/13d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/snow.svg";
           break;
 
         case 95:
-          return "http://openweathermap.org/img/wn/11d@2x.png";
+          return isDay
+            ? "https://basmilius.github.io/weather-icons/production/fill/all/thunderstorms-day.svg"
+            : "https://basmilius.github.io/weather-icons/production/fill/all/thunderstorms-night.svg";
           break;
 
         case 96:
         case 99:
-          return "http://openweathermap.org/img/wn/11d@2x.png";
+          return "https://basmilius.github.io/weather-icons/production/fill/all/thunderstorms-rain.svg";
           break;
+      }
+    },
+
+    getDayNightIcon() {
+      if (this.time.hour >= 6 && this.time.hour <= 8) {
+        return "https://basmilius.github.io/weather-icons/production/fill/all/sunrise.svg";
+      } else if (this.time.hour >= 16 && this.time.hour <= 18) {
+        return "https://basmilius.github.io/weather-icons/production/fill/all/sunset.svg";
+      } else if (this.time.hour > 8 && this.time.hour < 16) {
+        return "https://basmilius.github.io/weather-icons/production/fill/all/clear-day.svg";
+      } else {
+        return "https://basmilius.github.io/weather-icons/production/fill/all/clear-night.svg";
       }
     },
   },
 };
 </script>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
