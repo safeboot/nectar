@@ -57,9 +57,14 @@ Or alternatively, you can build the image yourself:
 docker build -t nectar .
 ```
 
-Once the image has been pulled or built, you can run the app using the following command:
+Once the image has been pulled or built, copy over the database files from the `db` folder like so:
 ```bash
-docker run -d -p 3000:3000 ghcr.io/safeboot/nectar:latest
+cp -r db /your-database-dir
+```
+
+And then run the following command:
+```bash
+docker run -d -p 3000:5173 -v /your-database-dir:/app/db ghcr.io/safeboot/nectar:latest
 ```
 
 **One more step!**
