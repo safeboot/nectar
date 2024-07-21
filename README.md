@@ -80,7 +80,7 @@ And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 - [x] Adjust config through the UI
 - [x] Wallpaper picker
 - [x] Docker support
-- [ ] Re-add Weather Widget
+- [x] Re-add Weather Widget
 - [ ] Demo Page
 - [ ] Dynamic Storage Support
 
