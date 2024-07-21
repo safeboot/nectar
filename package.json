@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@vueuse/motion": "^2.1.0",
-    "better-sqlite3": "^9.5.0",
+    "better-sqlite3": "^11.1.2",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
     "defu": "^6.1.4",
