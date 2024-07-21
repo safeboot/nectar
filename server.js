@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import express from 'express'
 
 import Database from 'better-sqlite3';
-const db = new Database('nectar.db', { verbose: console.log });
+const db = new Database('db/nectar.db', { verbose: console.log });
 db.pragma('journal_mode = WAL');
 
 import bodyParser from 'body-parser';
