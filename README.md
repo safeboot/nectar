@@ -81,6 +81,7 @@ And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 - [x] Wallpaper picker
 - [x] Docker support
 - [x] Re-add Weather Widget
+- [ ] Reordering Items
 - [ ] Demo Page
 - [ ] Dynamic Storage Support
 
