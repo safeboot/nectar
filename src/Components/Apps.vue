@@ -89,7 +89,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.apps = data;
-          this.filteredApps = data;
+          this.filteredApps = data.sort((a, b) => a.order - b.order);
         });
     },
 

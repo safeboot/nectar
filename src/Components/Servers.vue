@@ -103,7 +103,7 @@ export default {
       await fetch("/api/servers")
         .then((response) => response.json())
         .then((data) => {
-          this.servers = data;
+          this.servers = data.sort((a, b) => a.order - b.order);
         });
     },
 

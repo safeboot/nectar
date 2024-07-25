@@ -49,12 +49,13 @@ app.get('/api/apps', (req, res) => {
 
 app.post('/api/apps', (req, res) => {
   const data = req.body;
+  console.log(data, data.id !== 'null');
   if (data.id !== 'null') {
-    const stmt = db.prepare('UPDATE apps SET name = ?, icon = ?, url = ?, server_id = ? WHERE id = ?');
-    stmt.run(data.name, data.icon, data.url, data.server_id, data.id);
+    const stmt = db.prepare('UPDATE apps SET name = ?, icon = ?, url = ?, order = ?, server_id = ? WHERE id = ?');
+    stmt.run(data.name, data.icon, data.url, data.order, data.server_id, data.id);
   } else {
-    const stmt = db.prepare('INSERT INTO apps (name, icon, url, server_id) VALUES (?, ?, ?, ?)');
-    stmt.run(data.name, data.icon, data.url, data.server_id);
+    const stmt = db.prepare('INSERT INTO apps (name, icon, url, order, server_id) VALUES (?, ?, ?, ?, ?)');
+    stmt.run(data.name, data.icon, data.url, data.order, data.server_id);
   }
 
   res.json({ success: true });
@@ -74,11 +75,11 @@ app.get('/api/servers', (req, res) => {
 app.post('/api/servers', (req, res) => {
   const data = req.body;
   if (data.id !== 'null') {
-    const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ? WHERE id = ?');
-    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.id);
+    const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ?, order = ? WHERE id = ?');
+    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.order, data.id);
   } else {
-    const stmt = db.prepare('INSERT INTO servers (name, host, port) VALUES (?, ?, ?)');
-    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port));
+    const stmt = db.prepare('INSERT INTO servers (name, host, port, order) VALUES (?, ?, ?, ?)');
+    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.order);
   }
 
   res.json({ success: true });
@@ -102,10 +103,10 @@ app.post('/api/bookmarks', (req, res) => {
   }
   
   if (data.id !== 'null') {
-    const stmt = db.prepare('UPDATE bookmarks SET name = ?, url = ?, icon = ?, category_id = ? WHERE id = ?');
+    const stmt = db.prepare('UPDATE bookmarks SET name = ?, url = ?, icon = ?, order = ?, category_id = ? WHERE id = ?');
     stmt.run(data.name, data.url, data.icon, data.category_id, data.id);
   } else {
-    const stmt = db.prepare('INSERT INTO bookmarks (name, url, icon, category_id) VALUES (?, ?, ?, ?)');
+    const stmt = db.prepare('INSERT INTO bookmarks (name, url, icon, order, category_id) VALUES (?, ?, ?, ?, ?)');
     stmt.run(data.name, data.url, data.icon, data.category_id);
   }
 

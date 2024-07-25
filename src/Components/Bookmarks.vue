@@ -102,7 +102,7 @@ export default {
       await fetch("/api/bookmarks")
         .then((response) => response.json())
         .then((data) => {
-          this.bookmarks = data;
+          this.bookmarks = data.sort((a, b) => a.order - b.order);
           this.filteredBookmarks = data;
         });
     },

@@ -24,6 +24,7 @@ CREATE TABLE "apps" (
   "name" TEXT NOT NULL,
   "icon" TEXT,
   "url" TEXT NOT NULL,
+  "order" integer NOT NULL DEFAULT 0,
   "server_id" INTEGER NOT NULL,
   PRIMARY KEY ("id", "server_id"),
   CONSTRAINT "apps_server_id" FOREIGN KEY ("server_id") REFERENCES "servers" ("id") ON DELETE CASCADE
@@ -33,7 +34,7 @@ CREATE TABLE "apps" (
 -- Records of apps
 -- ----------------------------
 BEGIN;
-INSERT INTO "apps" ("id", "name", "icon", "url", "server_id") VALUES (1, 'Plex', 'https://media.sys.truenas.net/apps/plex/icons/icon.png', 'http://192.168.1.10:32400', 1);
+INSERT INTO "apps" ("id", "name", "icon", "url", "order", "server_id") VALUES (1, 'Plex', 'https://media.sys.truenas.net/apps/plex/icons/icon.png', 'http://192.168.1.10:32400', 0, 1);
 COMMIT;
 
 -- ----------------------------
@@ -63,6 +64,7 @@ CREATE TABLE "bookmarks" (
   "name" TEXT NOT NULL,
   "url" TEXT NOT NULL,
   "icon" TEXT,
+  "order" integer NOT NULL DEFAULT 0,
   "category_id" INTEGER NOT NULL,
   PRIMARY KEY ("id"),
   CONSTRAINT "bookmark_bookmark_categories_id" FOREIGN KEY ("category_id") REFERENCES "bookmark_categories" ("id") ON DELETE CASCADE
@@ -72,8 +74,8 @@ CREATE TABLE "bookmarks" (
 -- Records of bookmarks
 -- ----------------------------
 BEGIN;
-INSERT INTO "bookmarks" ("id", "name", "url", "icon", "category_id") VALUES (1, 'GitHub', 'https://github.com', NULL, 1);
-INSERT INTO "bookmarks" ("id", "name", "url", "icon", "category_id") VALUES (2, 'Laracasts', 'https://laracasts.com', 'https://laracasts.com/favicons/favicon-96x96.png', 2);
+INSERT INTO "bookmarks" ("id", "name", "url", "icon", "order", "category_id") VALUES (1, 'GitHub', 'https://github.com', NULL, 0, 1);
+INSERT INTO "bookmarks" ("id", "name", "url", "icon", "order", "category_id") VALUES (2, 'Laracasts', 'https://laracasts.com', 'https://laracasts.com/favicons/favicon-96x96.png', 1, 2);
 COMMIT;
 
 -- ----------------------------
@@ -85,6 +87,7 @@ CREATE TABLE "servers" (
   "name" TEXT NOT NULL,
   "host" TEXT NOT NULL,
   "port" INTEGER,
+  "order" integer NOT NULL DEFAULT 0,
   PRIMARY KEY ("id")
 );
 
@@ -92,8 +95,8 @@ CREATE TABLE "servers" (
 -- Records of servers
 -- ----------------------------
 BEGIN;
-INSERT INTO "servers" ("id", "name", "host", "port") VALUES (1, 'Evolia', 'evolia.local', NULL);
-INSERT INTO "servers" ("id", "name", "host", "port") VALUES (2, 'Flicker', 'flicker.local', 1234);
+INSERT INTO "servers" ("id", "name", "host", "port", "order") VALUES (1, 'Evolia', 'evolia.local', NULL, 0);
+INSERT INTO "servers" ("id", "name", "host", "port", "order") VALUES (2, 'Flicker', 'flicker.local', 1234, 1);
 COMMIT;
 
 PRAGMA foreign_keys = true;
