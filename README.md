@@ -13,7 +13,7 @@
 ## About the Project
 Nectar is simple and small dashboard for homelabers. It's designed to be self-hosted and customized to your heart's content. This app uses very little resources and can be run totally offline.
 
-<!-- - 🌤️ **Weather Widget** (powered by Open-Meteo) - you can configure the location in the config file without using your actual location or any telemetry. -->
+ - 🌤️ **Weather Widget** (powered by Open-Meteo) - automatically picks up your location (if allowed) and updates periodically to show you the weather and temperature. (HTTPS Only!)
 - 💽 **Server List** - this app relies on nothing but your configuration, you can adjust the name, hostname and the port. Server list is designed to be a simple list of your servers.
 - 🥪 **Apps List** - Nectar allows you to categorize your apps by server and search your collection.
 - 📌 **Bookmarks** - bookmark your favorite websites and organize them in categories through the settings panel.
@@ -81,6 +81,7 @@ And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 - [x] Wallpaper picker
 - [x] Docker support
 - [x] Re-add Weather Widget
+- [ ] Reordering Items
 - [ ] Demo Page
 - [ ] Dynamic Storage Support
 
