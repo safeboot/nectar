@@ -43,22 +43,28 @@ if (!isProduction) {
 }
 
 app.get('/api/apps', (req, res) => {
-  const stmt = db.prepare('SELECT apps.id, apps.name, apps.icon, apps.url, apps.server_id, servers.name as server_name FROM apps INNER JOIN servers ON apps.server_id = servers.id');
+  // Leaving this here so I can vent my frustration
+  // I forgot that in SQL there is a thing called "ORDER" you know, like the ORDER BY clause
+  // So I spent 2 hours trying to figure out why my query wasn't working and I was getting this
+  // stupid error message: "SqliteError: near "order": syntax error", anyway adding `` around
+  // it fixed it, but I'm still mad. Kthnxbai. >:(
+  const stmt = db.prepare('SELECT apps.id, apps.name, apps.icon, apps.url, apps.`order`, apps.server_id, servers.name as server_name FROM apps INNER JOIN servers ON apps.server_id = servers.id');
   res.json(stmt.all());
+  // I should become a farmer...
 });
 
 app.post('/api/apps', (req, res) => {
   const data = req.body;
-  console.log(data, data.id !== 'null');
   if (data.id !== 'null') {
-    const stmt = db.prepare('UPDATE apps SET name = ?, icon = ?, url = ?, order = ?, server_id = ? WHERE id = ?');
+    const stmt = db.prepare('UPDATE apps SET name = ?, icon = ?, url = ?, `order` = ?, server_id = ? WHERE id = ?');
     stmt.run(data.name, data.icon, data.url, data.order, data.server_id, data.id);
   } else {
-    const stmt = db.prepare('INSERT INTO apps (name, icon, url, order, server_id) VALUES (?, ?, ?, ?, ?)');
-    stmt.run(data.name, data.icon, data.url, data.order, data.server_id);
+    const stmt = db.prepare('INSERT INTO apps (name, icon, url, `order`, server_id) VALUES (?, ?, ?, ?, ?)');
+    const info = stmt.run(data.name, data.icon, data.url, 0, data.server_id);
+    data.id = info.lastInsertRowid;
   }
 
-  res.json({ success: true });
+  res.json({ success: true, data: { id: data.id } });
 });
 
 app.delete('/api/apps/:id', (req, res) => {
@@ -75,14 +81,15 @@ app.get('/api/servers', (req, res) => {
 app.post('/api/servers', (req, res) => {
   const data = req.body;
   if (data.id !== 'null') {
-    const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ?, order = ? WHERE id = ?');
+    const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ?, `order` = ? WHERE id = ?');
     stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.order, data.id);
   } else {
-    const stmt = db.prepare('INSERT INTO servers (name, host, port, order) VALUES (?, ?, ?, ?)');
-    stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.order);
+    const stmt = db.prepare('INSERT INTO servers (name, host, port, `order`) VALUES (?, ?, ?, ?)');
+    const info = stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.order);
+    data.id = info.lastInsertRowid;
   }
 
-  res.json({ success: true });
+  res.json({ success: true, data: { id: data.id } });
 });
 
 app.delete('/api/servers/:id', (req, res) => {
@@ -92,7 +99,7 @@ app.delete('/api/servers/:id', (req, res) => {
 });
 
 app.get('/api/bookmarks', (req, res) => {
-  const stmt = db.prepare('SELECT bookmarks.id, bookmarks.name, bookmarks.url, bookmarks.icon, bookmarks.category_id, bookmark_categories.name as category_name FROM bookmarks INNER JOIN bookmark_categories ON bookmarks.category_id = bookmark_categories.id');
+  const stmt = db.prepare('SELECT bookmarks.id, bookmarks.name, bookmarks.url, bookmarks.icon, bookmarks.`order`, bookmarks.category_id, bookmark_categories.name as category_name FROM bookmarks INNER JOIN bookmark_categories ON bookmarks.category_id = bookmark_categories.id');
   res.json(stmt.all());
 });
 
@@ -103,14 +110,14 @@ app.post('/api/bookmarks', (req, res) => {
   }
   
   if (data.id !== 'null') {
-    const stmt = db.prepare('UPDATE bookmarks SET name = ?, url = ?, icon = ?, order = ?, category_id = ? WHERE id = ?');
-    stmt.run(data.name, data.url, data.icon, data.category_id, data.id);
+    const stmt = db.prepare('UPDATE bookmarks SET name = ?, url = ?, icon = ?, `order` = ?, category_id = ? WHERE id = ?');
+    stmt.run(data.name, data.url, data.icon, data.order, data.category_id, data.id);
   } else {
-    const stmt = db.prepare('INSERT INTO bookmarks (name, url, icon, order, category_id) VALUES (?, ?, ?, ?, ?)');
+    const stmt = db.prepare('INSERT INTO bookmarks (name, url, icon, `order`, category_id) VALUES (?, ?, ?, ?, ?)');
     stmt.run(data.name, data.url, data.icon, data.category_id);
   }
 
-  res.json({ success: true });
+  res.json({ success: true, data: { id: data.id } });
 });
 
 app.delete('/api/bookmarks/:id', (req, res) => {
@@ -134,7 +141,7 @@ app.post('/api/bookmark_categories', (req, res) => {
     stmt.run(data.name);
   }
 
-  res.json({ success: true });
+  res.json({ success: true, data: { id: data.id } });
 });
 
 app.delete('/api/bookmark_categories/:id', (req, res) => {

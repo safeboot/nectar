@@ -109,7 +109,13 @@
             </div>
             <button
               @click="
-                servers.push({ id: null, name: '', host: '', port: '' });
+                servers.push({
+                  id: null,
+                  name: '',
+                  host: '',
+                  port: '',
+                  order: servers.length,
+                });
                 expandList('servers');
               "
               class="text-white hover:text-sky-300 transition duration-300"
@@ -145,70 +151,109 @@
               <p class="text-gray-200">Port</p>
               <p class="text-gray-200 text-right">Actions</p>
             </div>
-            <div
-              class="server mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
-              v-for="(server, index) in servers"
-              :key="index"
+            <draggable
+              class="servers flex flex-col gap-8 lg:gap-2"
+              :list="servers"
+              item-key="id"
+              @start="dragging = true"
+              @end="dragging = false"
+              @change="(event) => saveOrder(event, 'servers')"
+              handle="#handle"
             >
-              <input
-                type="text"
-                v-model="server.name"
-                placeholder="Name"
-                class="col-span-2 rounded-md"
-              />
-              <input
-                type="text"
-                v-model="server.host"
-                placeholder="Host"
-                class="col-span-2 rounded-md"
-              />
-              <input
-                type="number"
-                v-model="server.port"
-                placeholder="Port"
-                class="rounded-md"
-              />
-              <div class="grid grid-cols-2 gap-2">
-                <button
-                  @click="deleteServer(server)"
-                  class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+              <template #item="{ element, index }">
+                <div class="grid grid-cols-2 lg:grid-cols-6 gap-2">
+                  <div class="input-container col-span-2 flex items-center gap-2">
+                    <button
+                      class="size-[42px] border border-gray-700 bg-neutral-950 flex justify-center items-center flex-shrink-0 rounded-md"
+                      id="handle"
+                      @mousedown="dragging = true"
+                      @mouseup="dragging = false"
+                      @mouseleave="dragging = false"
+                      :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6 text-gray-300"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                        />
+                      </svg>
+                    </button>
+                    <input
+                      type="text"
+                      v-model="element.name"
+                      placeholder="Name"
+                      class="w-full rounded-md"
                     />
-                  </svg>
-                </button>
-                <button
-                  @click="saveServer(server)"
-                  class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+                  </div>
+                  <input
+                    type="text"
+                    v-model="element.host"
+                    placeholder="Host"
+                    class="col-span-2 rounded-md"
+                  />
+                  <input
+                    type="number"
+                    v-model="element.port"
+                    placeholder="Port"
+                    class="rounded-md"
+                  />
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      @click="
+                        deleteServer(element);
+                        expandList('servers');
+                      "
+                      class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      @click="
+                        saveItem('servers', element);
+                        expandList('servers');
+                      "
+                      class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </draggable>
           </div>
         </div>
 
@@ -219,7 +264,7 @@
           <p class="text-white/75">No servers found.</p>
           <button
             @click="
-              servers.push({ id: null, name: '', host: '', port: '' });
+              servers.push({ id: null, name: '', host: '', port: '', order: 0 });
               expandList('servers');
             "
             class="bg-sky-500 text-white px-2.5 py-1.5 flex justify-center items-center gap-2 rounded-md hover:bg-sky-600 transition duration-300"
@@ -267,7 +312,14 @@
             </div>
             <button
               @click="
-                apps.push({ id: null, name: '', icon: '', url: '', server_id: null });
+                apps.push({
+                  id: null,
+                  name: '',
+                  icon: '',
+                  url: '',
+                  order: apps.length,
+                  server_id: null,
+                });
                 expandList('apps');
               "
               class="text-white hover:text-sky-300 transition duration-300"
@@ -304,75 +356,113 @@
               <p class="text-gray-200">Server</p>
               <p class="text-gray-200 text-right">Actions</p>
             </div>
-            <div
-              class="app mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
-              v-for="(app, index) in apps"
-              :key="index"
+            <draggable
+              class="apps flex flex-col gap-8 lg:gap-2"
+              :list="apps"
+              item-key="id"
+              @start="dragging = true"
+              @end="dragging = false"
+              @change="(event) => saveOrder(event, 'apps')"
+              handle="#handle"
             >
-              <input
-                type="text"
-                v-model="app.name"
-                placeholder="Name"
-                class="col-span-2 rounded-md"
-              />
-              <input
-                type="text"
-                v-model="app.icon"
-                placeholder="Icon"
-                class="rounded-md"
-              />
-              <input type="text" v-model="app.url" placeholder="URL" class="rounded-md" />
-              <select v-model="app.server_id" class="form-select rounded-md">
-                <option value="null">Select a server...</option>
-                <option
-                  :value="server.id"
-                  v-for="(server, index) in servers"
-                  :key="index"
-                >
-                  {{ server.name }}
-                </option>
-              </select>
-              <div class="grid grid-cols-2 gap-2">
-                <button
-                  @click="deleteApp(app)"
-                  class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+              <template #item="{ element, index }">
+                <div class="grid grid-cols-2 lg:grid-cols-6 gap-2">
+                  <div class="input-container col-span-2 flex items-center gap-2">
+                    <button
+                      class="size-[42px] border border-gray-700 bg-neutral-950 flex justify-center items-center flex-shrink-0 rounded-md"
+                      id="handle"
+                      @mousedown="dragging = true"
+                      @mouseup="dragging = false"
+                      @mouseleave="dragging = false"
+                      :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6 text-gray-300"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                        />
+                      </svg>
+                    </button>
+                    <input
+                      type="text"
+                      v-model="element.name"
+                      placeholder="Name"
+                      class="w-full rounded-md"
                     />
-                  </svg>
-                </button>
-                <button
-                  @click="saveApp(app)"
-                  class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+                  </div>
+                  <input
+                    type="text"
+                    v-model="element.icon"
+                    placeholder="Icon"
+                    class="rounded-md"
+                  />
+                  <input
+                    type="text"
+                    v-model="element.url"
+                    placeholder="URL"
+                    class="rounded-md"
+                  />
+                  <select v-model="element.server_id" class="form-select rounded-md">
+                    <option value="null">Select a server...</option>
+                    <option
+                      :value="server.id"
+                      v-for="(server, index) in servers"
+                      :key="index"
+                    >
+                      {{ server.name }}
+                    </option>
+                  </select>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      @click="deleteApp(element)"
+                      class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      @click="saveItem('apps', element)"
+                      class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </draggable>
           </div>
         </div>
 
@@ -383,7 +473,14 @@
           <p class="text-white/75">No apps found.</p>
           <button
             @click="
-              apps.push({ id: null, name: '', icon: '', url: '', server_id: null });
+              apps.push({
+                id: null,
+                name: '',
+                icon: '',
+                url: '',
+                order: apps.length,
+                server_id: null,
+              });
               expandList('apps');
             "
             class="bg-sky-500 text-white px-2.5 py-1.5 flex justify-center items-center gap-2 rounded-md hover:bg-sky-600 transition duration-300"
@@ -436,6 +533,7 @@
                   name: '',
                   icon: '',
                   url: '',
+                  order: bookmarks.length,
                   category_id: null,
                 });
                 expandList('bookmarks');
@@ -474,80 +572,113 @@
               <p class="text-gray-200">Category</p>
               <p class="text-gray-200 text-right">Actions</p>
             </div>
-            <div
-              class="bookmark mb-8 lg:mb-0 last:mb-0 grid grid-cols-2 lg:grid-cols-6 gap-2"
-              v-for="(bookmark, index) in bookmarks"
-              :key="index"
+            <draggable
+              class="bookmarks flex flex-col gap-8 lg:gap-2"
+              :list="bookmarks"
+              item-key="id"
+              @start="dragging = true"
+              @end="dragging = false"
+              @change="(event) => saveOrder(event, 'bookmarks')"
+              handle="#handle"
             >
-              <input
-                type="text"
-                v-model="bookmark.name"
-                placeholder="Name"
-                class="col-span-2 rounded-md"
-              />
-              <input
-                type="text"
-                v-model="bookmark.icon"
-                placeholder="Icon"
-                class="rounded-md"
-              />
-              <input
-                type="text"
-                v-model="bookmark.url"
-                placeholder="URL"
-                class="rounded-md"
-              />
-              <select v-model="bookmark.category_id" class="form-select rounded-md">
-                <option value="null">Select a category...</option>
-                <option
-                  :value="category.id"
-                  v-for="(category, index) in categories"
-                  :key="index"
-                >
-                  {{ category.name }}
-                </option>
-              </select>
-              <div class="grid grid-cols-2 gap-2">
-                <button
-                  @click="deleteBookmark(bookmark)"
-                  class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+              <template #item="{ element, index }">
+                <div class="bookmark grid grid-cols-2 lg:grid-cols-6 gap-2">
+                  <div class="input-container col-span-2 flex items-center gap-2">
+                    <button
+                      class="size-[42px] border border-gray-700 bg-neutral-950 flex justify-center items-center flex-shrink-0 rounded-md"
+                      id="handle"
+                      @mousedown="dragging = true"
+                      @mouseup="dragging = false"
+                      @mouseleave="dragging = false"
+                      :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6 text-gray-300"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                        />
+                      </svg>
+                    </button>
+                    <input
+                      type="text"
+                      v-model="element.name"
+                      placeholder="Name"
+                      class="w-full rounded-md"
                     />
-                  </svg>
-                </button>
-                <button
-                  @click="saveBookmark(bookmark)"
-                  class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+                  </div>
+                  <input
+                    type="text"
+                    v-model="element.icon"
+                    placeholder="Icon"
+                    class="rounded-md"
+                  />
+                  <input
+                    type="text"
+                    v-model="element.url"
+                    placeholder="URL"
+                    class="rounded-md"
+                  />
+                  <select v-model="element.category_id" class="form-select rounded-md">
+                    <option value="null">Select a category...</option>
+                    <option
+                      :value="category.id"
+                      v-for="(category, index) in categories"
+                      :key="index"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      @click="deleteBookmark(bookmark)"
+                      class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      @click="saveItem('bookmarks', bookmark)"
+                      class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </draggable>
           </div>
         </div>
 
@@ -563,6 +694,7 @@
                 name: '',
                 icon: '',
                 url: '',
+                order: 0,
                 category_id: null,
               });
               expandList('bookmarks');
@@ -686,7 +818,7 @@
                   </svg>
                 </button>
                 <button
-                  @click="saveCategory(category)"
+                  @click="saveItem('categories', category)"
                   class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
                 >
                   <svg
@@ -856,7 +988,13 @@
 
 <script>
 import { nextTick } from "vue";
+import draggable from "vuedraggable";
+
 export default {
+  components: {
+    draggable,
+  },
+
   data() {
     return {
       open: false,
@@ -874,6 +1012,7 @@ export default {
       wallpapers: [],
       mode: "auto",
       movement: true,
+      dragging: false,
     };
   },
 
@@ -891,7 +1030,7 @@ export default {
       await fetch("/api/servers")
         .then((response) => response.json())
         .then((data) => {
-          this.servers = data;
+          this.servers = data.sort((a, b) => a.order - b.order);
         });
     },
 
@@ -919,52 +1058,22 @@ export default {
         });
     },
 
-    async saveServer(server) {
-      await fetch("/api/servers", {
+    async saveItem(type, item, refresh = true) {
+      await fetch(`/api/${type}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams(server),
-      });
+        body: new URLSearchParams(item),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          item.id = data.data.id;
+        });
 
-      this.$emit("updated-settings");
-    },
-
-    async saveApp(app) {
-      await fetch("/api/apps", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(app),
-      });
-
-      this.$emit("updated-settings");
-    },
-
-    async saveBookmark(bookmark) {
-      await fetch("/api/bookmarks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(bookmark),
-      });
-
-      this.$emit("updated-settings");
-    },
-
-    async saveCategory(category) {
-      await fetch("/api/bookmark_categories", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(category),
-      });
-
-      this.$emit("updated-settings");
+      if (refresh) {
+        this.$emit("updated-settings");
+      }
     },
 
     async deleteServer(server) {
@@ -1059,6 +1168,18 @@ export default {
     async saveMovement() {
       localStorage.setItem("movement", this.movement);
       this.$emit("updated-settings");
+    },
+
+    async saveOrder(event, type) {
+      const items = this[type].filter((item) => item.id !== event.moved.element.id);
+
+      items.splice(event.moved.newIndex, 0, event.moved.element);
+
+      items.forEach((item, index) => {
+        item.order = index;
+
+        this.saveItem(type, item, index === items.length - 1);
+      });
     },
 
     async expandList(section) {
