@@ -24,9 +24,9 @@ CREATE TABLE "apps" (
   "name" TEXT NOT NULL,
   "icon" TEXT,
   "url" TEXT NOT NULL,
-  "order" integer NOT NULL DEFAULT 0,
+  "order" INTEGER NOT NULL DEFAULT 0,
   "server_id" INTEGER NOT NULL,
-  PRIMARY KEY ("id", "server_id"),
+  PRIMARY KEY ("id"),
   CONSTRAINT "apps_server_id" FOREIGN KEY ("server_id") REFERENCES "servers" ("id") ON DELETE CASCADE
 );
 
@@ -64,7 +64,7 @@ CREATE TABLE "bookmarks" (
   "name" TEXT NOT NULL,
   "url" TEXT NOT NULL,
   "icon" TEXT,
-  "order" integer NOT NULL DEFAULT 0,
+  "order" INTEGER NOT NULL DEFAULT 0,
   "category_id" INTEGER NOT NULL,
   PRIMARY KEY ("id"),
   CONSTRAINT "bookmark_bookmark_categories_id" FOREIGN KEY ("category_id") REFERENCES "bookmark_categories" ("id") ON DELETE CASCADE
@@ -87,7 +87,7 @@ CREATE TABLE "servers" (
   "name" TEXT NOT NULL,
   "host" TEXT NOT NULL,
   "port" INTEGER,
-  "order" integer NOT NULL DEFAULT 0,
+  "order" INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY ("id")
 );
 
