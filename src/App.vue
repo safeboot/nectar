@@ -21,10 +21,13 @@
     >
       <p class="text-xl text-white/50 z-50">nectar.</p>
       <button
-        @click="$refs.settings.open = !$refs.settings.open"
+        @click="
+          $refs.settings.open = !$refs.settings.open;
+          $refs.settings.updateState();
+        "
         class="z-50 transition duration-300"
         :class="
-          $refs.settings?.open
+          open
             ? 'rotate-180 text-pink-300 hover:text-pink-400'
             : 'text-white/50 hover:text-sky-300'
         "
@@ -72,6 +75,7 @@ export default {
   data() {
     return {
       movement: true,
+      open: false,
     };
   },
 
@@ -107,6 +111,11 @@ export default {
       } else {
         wallpaper.style.backgroundImage = `url('${wallpapers[mode][0]}')`;
       }
+    },
+
+    setSettingsState(state) {
+      this.open = state;
+      console.log(this.open, state);
     },
   },
 };

@@ -1023,9 +1023,14 @@ export default {
     this.getCategories();
     this.getWallpapers();
     this.movement = localStorage.getItem("movement") === "true" || true;
+    this.$parent.setSettingsState(false);
   },
 
   methods: {
+    async updateState() {
+      this.$parent.setSettingsState(this.open);
+    },
+
     async getServers() {
       await fetch("/api/servers")
         .then((response) => response.json())
