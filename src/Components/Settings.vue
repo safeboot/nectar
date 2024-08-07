@@ -36,7 +36,10 @@
 
       <div class="tabs relative py-2 grid grid-cols-2">
         <button
-          @click="tab = 'content'"
+          @click="
+            tab !== 'content' ? expandReset() : '';
+            tab = 'content';
+          "
           class="tab p-2 flex justify-center items-center gap-2"
         >
           <svg
@@ -1187,7 +1190,7 @@ export default {
       });
     },
 
-    async expandList(section) {
+    async expandList(section, animation = true) {
       this.expanded[section] = true;
 
       await nextTick();
@@ -1212,9 +1215,31 @@ export default {
           break;
       }
 
-      if (container) {
+      if (!animation && this.$refs[container]) {
+        this.$refs[container].classList.remove("transition-all", "duration-300");
+      }
+
+      await nextTick();
+
+      if (container && this.$refs[container]) {
         this.$refs[container].style.maxHeight = this.$refs[container].scrollHeight + "px";
       }
+
+      // Against my better judgement, but it works :/
+      setTimeout(() => {
+        if (container && this.$refs[container]) {
+          this.$refs[container].classList.add("transition-all", "duration-300");
+        }
+      }, 300);
+    },
+
+    async expandReset() {
+      await this.$nextTick();
+      ["servers", "apps", "bookmarks", "categories"].forEach((section) => {
+        if (this.expanded[section]) {
+          this.expandList(section, false);
+        }
+      });
     },
   },
 };
