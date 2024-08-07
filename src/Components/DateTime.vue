@@ -102,6 +102,10 @@ export default {
       }
     },
     async getWeather() {
+      if (location.protocol !== "https:") {
+        return;
+      }
+
       if (navigator.geolocation) {
         await this.getLocation();
       } else {
