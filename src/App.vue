@@ -115,7 +115,6 @@ export default {
 
     setSettingsState(state) {
       this.open = state;
-      console.log(this.open, state);
     },
   },
 };
