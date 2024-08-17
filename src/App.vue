@@ -7,7 +7,7 @@
         class="main w-full max-w-6xl h-full py-16 flex flex-col gap-12"
         :class="{ 'movement-player': movement }"
       >
-        <DateTime />
+        <DateTime ref="dateTime" />
 
         <Servers ref="servers" />
 
@@ -53,7 +53,11 @@
     class="wallpaper fixed top-0 left-0 w-full min-h-screen bg-cover bg-center -z-10"
     ref="wallpaper"
   ></div>
-  <Settings ref="settings" @updated-settings="refresh" />
+  <Settings
+    ref="settings"
+    @updated-settings="refresh"
+    @updated-datetime="refreshDateTime"
+  />
 </template>
 
 <script>
@@ -94,6 +98,10 @@ export default {
       this.$refs.bookmarks.refresh();
       this.setWallpaper();
       this.movement = localStorage.getItem("movement") === "true";
+    },
+
+    refreshDateTime() {
+      this.$refs.dateTime.refresh();
     },
 
     setWallpaper() {

@@ -900,6 +900,66 @@
           </div>
         </div>
 
+        <div class="formatting py-6 flex flex-col">
+          <h2 class="text-white/75">Formatting</h2>
+          <div
+            class="mt-2 grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-x sm:divide-y-0 divide-neutral-800"
+          >
+            <div class="pb-4 sm:pr-4 sm:pb-0 flex flex-col gap-2">
+              <p class="text-gray-400 text-sm">Time Format</p>
+              <div class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  v-model="formatting.time"
+                  value="24h"
+                  @change="saveFormatting('time')"
+                  class="size-5 lg:size-4 rounded-full"
+                  id="formatting_24h"
+                />
+                <label for="formatting_24h" class="text-gray-400">24-hour Format</label>
+              </div>
+              <div class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  v-model="formatting.time"
+                  value="12h"
+                  @change="saveFormatting('time')"
+                  class="size-5 lg:size-4 rounded-full"
+                  id="formatting_12h"
+                />
+                <label for="formatting_12h" class="text-gray-400">12-hour Format</label>
+              </div>
+            </div>
+            <div class="pt-4 sm:pl-4 sm:pt-0 flex flex-col gap-2">
+              <p class="text-gray-400 text-sm">Weather Format</p>
+              <div class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  v-model="formatting.weather"
+                  value="celsius"
+                  @change="saveFormatting('weather')"
+                  class="size-5 lg:size-4 rounded-full"
+                  id="formatting_c"
+                />
+                <label for="formatting_c" class="text-gray-400">Celsius (Metric)</label>
+              </div>
+              <div class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  v-model="formatting.weather"
+                  value="12h"
+                  @change="saveFormatting('weather')"
+                  class="size-5 lg:size-4 rounded-full"
+                  id="formatting_f"
+                />
+                <label for="formatting_f" class="text-gray-400"
+                  >Fahrenheit (Imperial)</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div
           class="wallpapers py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2"
           v-if="wallpapers.length"
@@ -1016,6 +1076,10 @@ export default {
       mode: "auto",
       movement: true,
       dragging: false,
+      formatting: {
+        time: "24h",
+        weather: "celsius",
+      },
     };
   },
 
@@ -1026,6 +1090,8 @@ export default {
     this.getCategories();
     this.getWallpapers();
     this.movement = localStorage.getItem("movement") === "true" || true;
+    this.formatting.time = localStorage.getItem("format_time") || "24h";
+    this.formatting.weather = localStorage.getItem("format_weather") || "celsius";
     this.$parent.setSettingsState(false);
   },
 
@@ -1176,6 +1242,11 @@ export default {
     async saveMovement() {
       localStorage.setItem("movement", this.movement);
       this.$emit("updated-settings");
+    },
+
+    async saveFormatting(type) {
+      localStorage.setItem(`format_${type}`, this.formatting[type]);
+      this.$emit("updated-datetime");
     },
 
     async saveOrder(event, type) {

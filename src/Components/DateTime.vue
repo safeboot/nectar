@@ -4,11 +4,13 @@
       <h1 class="text-6xl md:text-8xl text-white font-medium transition-all duration-300">
         {{ time.hour.toString().padStart(2, "0") }}:{{
           time.minute.toString().padStart(2, "0")
-        }}:{{ time.second.toString().padStart(2, "0") }}
+        }}:{{ time.second.toString().padStart(2, "0") }}{{ time.suffix }}
       </h1>
       <Transition>
         <div class="flex items-center gap-2" v-if="weather.temperature !== null">
-          <p class="text-white text-xl">{{ weather.temperature }}°C</p>
+          <p class="text-white text-xl">
+            {{ weather.temperature }}°{{ formatting.weather === "celsius" ? "C" : "F" }}
+          </p>
           <img :src="getWeatherIcon()" class="w-9" />
         </div>
       </Transition>
@@ -49,6 +51,7 @@ export default {
         hour: 0,
         minute: 0,
         second: 0,
+        suffix: "",
       },
       date: "",
       weather: {
@@ -57,10 +60,17 @@ export default {
         temperature: null,
         weatherCode: null,
       },
+      formatting: {
+        time: "24h",
+        weather: "celsius",
+      },
     };
   },
 
   mounted() {
+    this.formatting.time = localStorage.getItem("format_time") || "24h";
+    this.formatting.weather = localStorage.getItem("format_weather") || "celsius";
+
     this.updateDateTime();
     this.getLocation();
     this.getWeather();
@@ -76,6 +86,13 @@ export default {
       this.time.minute = date.getMinutes();
       this.time.second = date.getSeconds();
 
+      if (this.formatting.time === "12h") {
+        this.time.suffix = this.time.hour >= 12 ? "pm" : "am";
+        this.time.hour = this.time.hour % 12 || 12;
+      } else {
+        this.time.suffix = "";
+      }
+
       this.date =
         this.days[date.getDay()] +
         ", " +
@@ -88,6 +105,7 @@ export default {
 
       setTimeout(this.updateDateTime, 1000);
     },
+
     getDateOrdinal(day) {
       if (day > 3 && day < 21) return "th";
       switch (day % 10) {
@@ -101,6 +119,7 @@ export default {
           return "th";
       }
     },
+
     async getWeather() {
       if (location.protocol !== "https:") {
         return;
@@ -114,7 +133,11 @@ export default {
 
       if (this.weather.latitude !== null && this.weather.longitude !== null) {
         await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${this.weather.latitude}&longitude=${this.weather.longitude}&current=temperature_2m,weather_code`
+          `https://api.open-meteo.com/v1/forecast?latitude=${
+            this.weather.latitude
+          }&longitude=${this.weather.longitude}&current=temperature_2m,weather_code${
+            this.formatting.weather === "celsius" ? "" : "&temperature_unit=fahrenheit"
+          }`
         )
           .then((response) => {
             return response.json();
@@ -227,6 +250,15 @@ export default {
       } else {
         return "https://basmilius.github.io/weather-icons/production/fill/all/clear-night.svg";
       }
+    },
+
+    refresh() {
+      this.formatting.time = localStorage.getItem("format_time") || "24h";
+      this.formatting.weather = localStorage.getItem("format_weather") || "celsius";
+
+      this.updateDateTime();
+      this.getLocation();
+      this.getWeather();
     },
   },
 };
