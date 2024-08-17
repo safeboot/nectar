@@ -121,7 +121,8 @@
                 });
                 expandList('servers');
               "
-              class="text-white hover:text-sky-300 transition duration-300"
+              :disabled="demo === 'true'"
+              class="text-white disabled:cursor-not-allowed hover:text-sky-300 transition duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +173,12 @@
                       @mousedown="dragging = true"
                       @mouseup="dragging = false"
                       @mouseleave="dragging = false"
-                      :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
+                      :class="{
+                        'cursor-grabbing': dragging,
+                        'cursor-grab': !dragging,
+                        'cursor-not-allowed': demo === 'true',
+                      }"
+                      :disabled="demo === 'true'"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +331,8 @@
                 });
                 expandList('apps');
               "
-              class="text-white hover:text-sky-300 transition duration-300"
+              :disabled="demo === 'true'"
+              class="text-white disabled:cursor-not-allowed hover:text-sky-300 transition duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -377,7 +384,12 @@
                       @mousedown="dragging = true"
                       @mouseup="dragging = false"
                       @mouseleave="dragging = false"
-                      :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
+                      :class="{
+                        'cursor-grabbing': dragging,
+                        'cursor-grab': !dragging,
+                        'cursor-not-allowed': demo === 'true',
+                      }"
+                      :disabled="demo === 'true'"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -541,7 +553,8 @@
                 });
                 expandList('bookmarks');
               "
-              class="text-white hover:text-sky-300 transition duration-300"
+              :disabled="demo === 'true'"
+              class="text-white disabled:cursor-not-allowed hover:text-sky-300 transition duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -593,7 +606,12 @@
                       @mousedown="dragging = true"
                       @mouseup="dragging = false"
                       @mouseleave="dragging = false"
-                      :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
+                      :class="{
+                        'cursor-grabbing': dragging,
+                        'cursor-grab': !dragging,
+                        'cursor-not-allowed': demo === 'true',
+                      }"
+                      :disabled="demo === 'true'"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -756,7 +774,8 @@
                 });
                 expandList('categories');
               "
-              class="text-white hover:text-sky-300 transition duration-300"
+              :disabled="demo === 'true'"
+              class="text-white disabled:cursor-not-allowed hover:text-sky-300 transition duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -883,7 +902,7 @@
         class="body flex flex-col divide-y divide-neutral-800"
         v-if="tab === 'customization'"
       >
-        <div class="burn-in-protection pb-6 flex flex-col">
+        <div class="burn-in-protection py-6 flex flex-col">
           <h2 class="text-white/75">Burn in Protection</h2>
           <div class="mt-2 flex items-start sm:items-center gap-2">
             <input
@@ -1038,6 +1057,27 @@
               >
             </li>
           </ul>
+          <p class="mt-4 text-white" v-if="demo === 'true'">
+            Thanks for checking out <b>nectar</b>, this app is currently running in demo
+            mode. You can support me by hitting the "Star" button on
+            <a
+              href="https://github.com/safeboot/nectar"
+              target="_blank"
+              class="text-orange-300 underline hover:text-orange-200 transition duration-300"
+              >GitHub</a
+            >
+            . Feel free to message me on Discord (@safeboot) 🧡
+          </p>
+          <p class="mt-4 text-xs text-white/75" v-if="demo === 'true'">
+            Name inspired by Mili's
+            <a
+              href="https://www.youtube.com/watch?v=UqUH7LHMj50"
+              target="_blank"
+              class="underline hover:text-white transition duration-300"
+              >Poems of a Machine</a
+            >
+            and a friend.
+          </p>
         </div>
       </div>
     </div>
@@ -1080,6 +1120,7 @@ export default {
         time: "24h",
         weather: "celsius",
       },
+      demo: import.meta.env.VITE_DEMO_MODE,
     };
   },
 
@@ -1133,6 +1174,10 @@ export default {
     },
 
     async saveItem(type, item, refresh = true) {
+      if (import.meta.env.VITE_DEMO_MODE === "true") {
+        return;
+      }
+
       await fetch(`/api/${type}`, {
         method: "POST",
         headers: {
@@ -1151,6 +1196,10 @@ export default {
     },
 
     async deleteServer(server) {
+      if (import.meta.env.VITE_DEMO_MODE === "true") {
+        return;
+      }
+
       if (server.id === null) {
         this.servers = this.servers.filter((s) => s !== server);
         this.$emit("updated-settings");
@@ -1171,6 +1220,10 @@ export default {
     },
 
     async deleteApp(app) {
+      if (import.meta.env.VITE_DEMO_MODE === "true") {
+        return;
+      }
+
       if (app.id === null) {
         this.apps = this.apps.filter((a) => a !== app);
         this.$emit("updated-settings");
@@ -1190,6 +1243,10 @@ export default {
     },
 
     async deleteBookmark(bookmark) {
+      if (import.meta.env.VITE_DEMO_MODE === "true") {
+        return;
+      }
+
       if (bookmark.id === null) {
         this.bookmarks = this.bookmarks.filter((b) => b !== bookmark);
         this.$emit("updated-settings");
@@ -1209,6 +1266,10 @@ export default {
     },
 
     async deleteCategory(category) {
+      if (import.meta.env.VITE_DEMO_MODE === "true") {
+        return;
+      }
+
       if (category.id === null) {
         this.categories = this.categories.filter((c) => c !== category);
         this.$emit("updated-settings");
@@ -1250,6 +1311,10 @@ export default {
     },
 
     async saveOrder(event, type) {
+      if (import.meta.env.VITE_DEMO_MODE === "true") {
+        return;
+      }
+
       const items = this[type].filter((item) => item.id !== event.moved.element.id);
 
       items.splice(event.moved.newIndex, 0, event.moved.element);
