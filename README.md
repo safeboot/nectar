@@ -83,7 +83,7 @@ And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 - [x] Docker support
 - [x] Re-add Weather Widget
 - [x] Reordering Items
-- [ ] Time & Weather Formats
+- [x] Time & Weather Formats
 - [ ] Demo Page
 - [ ] Dynamic Storage Support
 
