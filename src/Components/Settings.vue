@@ -840,7 +840,7 @@
                   </svg>
                 </button>
                 <button
-                  @click="saveItem('categories', category)"
+                  @click="saveItem('bookmark_categories', category)"
                   class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
                 >
                   <svg

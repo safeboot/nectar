@@ -8,7 +8,7 @@
           @change="filterBookmarks"
           class="form-select w-40 h-8 appearence-none bg-transparent text-white px-1 py-0 outline-none border-2 border-transparent rounded-lg focus:ring-transparent focus:border-orange-300 transition-all duration-300"
         >
-          <option value="null" class="bg-neutral-700">All Bookmarks</option>
+          <option value="null" class="bg-neutral-700">All Categories</option>
           <option
             :value="category.id"
             v-for="(category, index) in categories"

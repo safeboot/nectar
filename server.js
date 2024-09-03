@@ -133,6 +133,7 @@ app.get('/api/bookmark_categories', (req, res) => {
 
 app.post('/api/bookmark_categories', (req, res) => {
   const data = req.body;
+  console.log(data, data.id !== 'null');
   if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE bookmark_categories SET name = ? WHERE id = ?');
     stmt.run(data.name, data.id);
