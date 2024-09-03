@@ -659,7 +659,7 @@
                   </select>
                   <div class="grid grid-cols-2 gap-2">
                     <button
-                      @click="deleteBookmark(bookmark)"
+                      @click="deleteBookmark(element)"
                       class="bg-red-500 text-white flex justify-center items-center rounded-md hover:bg-red-600 transition duration-300"
                     >
                       <svg
@@ -678,7 +678,7 @@
                       </svg>
                     </button>
                     <button
-                      @click="saveItem('bookmarks', bookmark)"
+                      @click="saveItem('bookmarks', element)"
                       class="bg-sky-500 text-white flex justify-center items-center rounded-md hover:bg-sky-600 transition duration-300"
                     >
                       <svg
@@ -1187,7 +1187,9 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          item.id = data.data.id;
+          if (data.data.length) {
+            item.id = data.data.id;
+          }
         });
 
       if (refresh) {

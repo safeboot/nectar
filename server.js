@@ -80,6 +80,7 @@ app.get('/api/servers', (req, res) => {
 
 app.post('/api/servers', (req, res) => {
   const data = req.body;
+  console.log(data);
   if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE servers SET name = ?, host = ?, port = ?, `order` = ? WHERE id = ?');
     stmt.run(data.name, data.host, data.port == 'null' ? null : Number(data.port), data.order, data.id);
@@ -114,7 +115,8 @@ app.post('/api/bookmarks', (req, res) => {
     stmt.run(data.name, data.url, data.icon, data.order, data.category_id, data.id);
   } else {
     const stmt = db.prepare('INSERT INTO bookmarks (name, url, icon, `order`, category_id) VALUES (?, ?, ?, ?, ?)');
-    stmt.run(data.name, data.url, data.icon, data.category_id);
+    const info = stmt.run(data.name, data.url, data.icon, Number(data.order), data.category_id);
+    data.id = info.lastInsertRowid;
   }
 
   res.json({ success: true, data: { id: data.id } });
@@ -133,13 +135,13 @@ app.get('/api/bookmark_categories', (req, res) => {
 
 app.post('/api/bookmark_categories', (req, res) => {
   const data = req.body;
-  console.log(data, data.id !== 'null');
   if (data.id !== 'null') {
     const stmt = db.prepare('UPDATE bookmark_categories SET name = ? WHERE id = ?');
     stmt.run(data.name, data.id);
   } else {
     const stmt = db.prepare('INSERT INTO bookmark_categories (name) VALUES (?)');
-    stmt.run(data.name);
+    const info = stmt.run(data.name);
+    data.id = info.lastInsertRowid;
   }
 
   res.json({ success: true, data: { id: data.id } });
