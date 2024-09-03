@@ -1026,6 +1026,23 @@
           </button>
         </div>
 
+        <div class="py-6 flex items-center gap-2">
+          <a
+            href="https://github.com/safeboot/nectar"
+            target="_blank"
+            class="size-8 text-white"
+            title="View on GitHub"
+          >
+            <img
+              src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+              class="invert size-8 rounded-md"
+            />
+          </a>
+          <p class="text-gray-300">
+            You are running: <span class="text-white">v{{ version }}</span>
+          </p>
+        </div>
+
         <div class="credits pt-6">
           <h2 class="text-white/75">Credits</h2>
           <ul class="text-gray-300 list-disc list-inside">
@@ -1092,6 +1109,7 @@
 <script>
 import { nextTick } from "vue";
 import draggable from "vuedraggable";
+import packageJson from "../../package.json";
 
 export default {
   components: {
@@ -1121,6 +1139,7 @@ export default {
         weather: "celsius",
       },
       demo: import.meta.env.VITE_DEMO_MODE,
+      version: packageJson.version,
     };
   },
 
