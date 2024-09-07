@@ -6,6 +6,10 @@
    Small, self-hostable and customizable homelab dashboard.
 </p>
 
+<p align="center">
+   <a href="https://nectar.safeboot.xyz" target="_blank">Try the Demo!</a>
+</p>
+
 ---
 
 <p align="center" style="font-style: italic; font-weight: 600">"Ever dreaming to taste the sweet nectar of morality."</p>
@@ -84,7 +88,7 @@ And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 - [x] Re-add Weather Widget
 - [x] Reordering Items
 - [x] Time & Weather Formats
-- [ ] Demo Page
+- [x] Demo Page
 - [ ] Dynamic Storage Support
 
 ## License
