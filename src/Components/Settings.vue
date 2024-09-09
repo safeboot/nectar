@@ -1172,7 +1172,7 @@ export default {
       await fetch("/api/apps")
         .then((response) => response.json())
         .then((data) => {
-          this.apps = data;
+          this.apps = data.sort((a, b) => a.order - b.order);
         });
     },
 
@@ -1180,7 +1180,7 @@ export default {
       await fetch("/api/bookmarks")
         .then((response) => response.json())
         .then((data) => {
-          this.bookmarks = data;
+          this.bookmarks = data.sort((a, b) => a.order - b.order);
         });
     },
 
