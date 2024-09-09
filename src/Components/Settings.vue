@@ -14,7 +14,10 @@
       <div class="header flex justify-between items-center">
         <h1 class="text-white/75 text-lg">Settings</h1>
         <button
-          @click="open = false"
+          @click="
+            open = false;
+            updateState();
+          "
           class="text-white hover:text-pink-300 transition duration-300"
         >
           <svg
@@ -1102,7 +1105,7 @@
   <div
     class="settings-background fixed top-0 left-0 w-full h-screen backdrop-blur-md bg-black/50 z-10 transition-all duration-300"
     :class="open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
-    @click="open === true ? (open = false) : ''"
+    @click="backgroundClick"
   ></div>
 </template>
 
@@ -1397,6 +1400,13 @@ export default {
           this.expandList(section, false);
         }
       });
+    },
+
+    backgroundClick() {
+      if (this.open) {
+        this.open = false;
+        this.updateState();
+      }
     },
   },
 };
