@@ -30,7 +30,12 @@
               <!-- <div class="size-2 bg-purple-400 rounded-full"></div> -->
             </div>
             <p class="text-sm text-gray-200">
-              {{ server.host }}{{ server.port ? ":" + server.port : "" }}
+              {{ server.host
+              }}{{
+                server.port && server.port != 80 && server.port != 443
+                  ? ":" + server.port
+                  : ""
+              }}
             </p>
           </div>
         </div>
