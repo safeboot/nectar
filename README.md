@@ -6,6 +6,10 @@
    Small, self-hostable and customizable homelab dashboard.
 </p>
 
+<p align="center">
+   <a href="https://nectar.safeboot.xyz" target="_blank">Try the Demo!</a>
+</p>
+
 ---
 
 <p align="center" style="font-style: italic; font-weight: 600">"Ever dreaming to taste the sweet nectar of morality."</p>
@@ -72,7 +76,7 @@ docker run -d -p 3000:5173 -v /your-database-dir:/app/db ghcr.io/safeboot/nectar
 
 You will need to place your Wallpapers inside the folder named `wallpapers` inside the `public` folder. The app will pick them up and they can be configured inside the Settings panel.
 
-> Note that you have to place the wallpapers inside the `public/wallpapers` folder before building the Docker image. But worry not, I am working on a way to link storage and have dynamic wallpaper support.
+> Note that you have to place the wallpapers inside the `public/wallpapers` folder before building the Docker image (or alternatively you could mount it with `-v /my-awesome-wallpapers:/app/public/wallpapers`). But worry not, I am working on a way to link storage and have dynamic wallpaper support.
 
 And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 
@@ -84,7 +88,7 @@ And that's it! You're all set up and ready to go. **Enjoy Nectar!** 🎉
 - [x] Re-add Weather Widget
 - [x] Reordering Items
 - [x] Time & Weather Formats
-- [ ] Demo Page
+- [x] Demo Page
 - [ ] Dynamic Storage Support
 
 ## License
