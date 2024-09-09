@@ -815,7 +815,7 @@
                 type="text"
                 v-model="category.name"
                 placeholder="Name"
-                class="col-span-5 rounded-md"
+                class="col-span-2 lg:col-span-5 rounded-md"
               />
               <div
                 class="col-span-2 lg:col-span-1 w-full h-[42px] grid grid-cols-2 gap-2"
