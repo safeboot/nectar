@@ -15,7 +15,7 @@
     "body-parser": "^1.20.3",
     "compression": "^1.7.4",
     "defu": "^6.1.4",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "vue": "^3.5.2",
     "vuedraggable": "^4.1.0"
   },
