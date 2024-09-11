@@ -1209,7 +1209,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data.data.length) {
+          if (data.data.id !== undefined) {
             item.id = data.data.id;
           }
         });
