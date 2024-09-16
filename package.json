@@ -16,7 +16,7 @@
     "compression": "^1.7.4",
     "defu": "^6.1.4",
     "express": "^4.21.0",
-    "vue": "^3.5.4",
+    "vue": "^3.5.5",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
