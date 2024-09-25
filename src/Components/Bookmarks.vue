@@ -3,6 +3,38 @@
     <div class="flex flex-col md:flex-row justify-between md:items-end">
       <h1 class="text-xl text-gray-100">Bookmarks</h1>
       <div class="flex justify-between md:justify-end items-center md:items-end gap-2">
+        <button @click="changeViewStyle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5 text-white md:mb-[5px]"
+            v-if="viewStyle === 'grid'"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5 text-white md:mb-1.5"
+            v-else
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
+            />
+          </svg>
+        </button>
         <select
           v-model="category"
           @change="filterBookmarks"
@@ -28,17 +60,23 @@
       </div>
     </div>
     <div
-      class="bookmarks grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-6"
+      class="bookmarks gap-2"
+      :class="
+        viewStyle === 'grid'
+          ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 md:gap-6'
+          : 'flex flex-col md:gap-4'
+      "
     >
       <a
         :href="bookmark.url"
         target="_blank"
-        class="bookmark group bg-black/20 backdrop-blur-md border border-gray-500/50 p-3 md:p-4 flex flex-col gap-2 rounded-xl shadow-md overflow-hidden active:shadow-orange-400/50 active:shadow-lg hover:border-orange-300 hover:shadow-lg transition duration-300"
+        class="bookmark group bg-black/20 backdrop-blur-md border border-gray-500/50 p-3 md:p-4 rounded-xl shadow-md overflow-hidden active:shadow-orange-400/50 active:shadow-lg hover:border-orange-300 hover:shadow-lg transition duration-300"
+        :class="viewStyle === 'grid' ? 'flex flex-col gap-2 ' : 'flex items-center gap-4'"
         v-for="(bookmark, index) in filteredBookmarks"
         :key="index"
       >
         <div
-          class="icon size-12 md:size-14 bg-white/10 p-1.5 flex justify-center items-center rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
+          class="icon size-12 md:size-14 bg-white/10 p-1.5 flex justify-center items-center flex-shrink-0 rounded-md overflow-hidden group-hover:bg-white/15 transition-all duration-300"
         >
           <img
             :src="
@@ -48,13 +86,21 @@
             class="w-full h-full object-contain rounded-sm"
           />
         </div>
-        <div class="flex flex-col">
+        <div class="w-full flex flex-col">
           <h1 class="text-white md:text-lg font-medium line-clamp-1">
             {{ bookmark.name }}
           </h1>
-          <p class="text-sm text-gray-200">
-            {{ bookmark.category_name }}
-          </p>
+          <div class="w-full flex justify-between items-center">
+            <p class="text-sm text-gray-200">
+              {{ bookmark.category_name }}
+            </p>
+            <p
+              class="hidden text-sm text-white/50 text-right"
+              :class="viewStyle === 'list' ? 'md:block' : ''"
+            >
+              {{ bookmark.url }}
+            </p>
+          </div>
         </div>
       </a>
       <p
@@ -76,6 +122,7 @@ export default {
       categories: [],
       category: null,
       search: "",
+      viewStyle: "grid",
     };
   },
 
@@ -87,6 +134,8 @@ export default {
     this.categories = Object.fromEntries(
       Object.entries(this.bookmarks).map(([index, bookmark]) => [bookmark.category, true])
     );
+
+    this.viewStyle = localStorage.getItem("bookmarks_view") ?? "grid";
   },
 
   methods: {
@@ -132,6 +181,11 @@ export default {
       }
 
       this.filteredBookmarks = bookmarks;
+    },
+
+    changeViewStyle() {
+      this.viewStyle = this.viewStyle === "grid" ? "list" : "grid";
+      localStorage.setItem("bookmarks_view", this.viewStyle);
     },
 
     refresh() {
