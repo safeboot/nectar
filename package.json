@@ -11,7 +11,7 @@
     "preview": "cross-env NODE_ENV=production node server"
   },
   "dependencies": {
-    "better-sqlite3": "^11.7.2",
+    "better-sqlite3": "^11.8.0",
     "body-parser": "^1.20.3",
     "compression": "^1.7.5",
     "defu": "^6.1.4",
