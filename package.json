@@ -23,7 +23,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@vitejs/plugin-vue": "^5.2.4",
     "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.4",
+    "postcss": "^8.5.5",
     "tailwindcss": "^4.1.8",
     "vite": "^6.3.5"
   }
