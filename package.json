@@ -20,7 +20,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/forms": "^0.5.11",
     "@vitejs/plugin-vue": "^6.0.2",
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.4",
