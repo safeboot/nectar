@@ -11,20 +11,20 @@
     "preview": "cross-env NODE_ENV=production node server"
   },
   "dependencies": {
-    "better-sqlite3": "^12.6.2",
+    "better-sqlite3": "^12.9.0",
     "body-parser": "^2.2.2",
     "compression": "^1.8.1",
-    "defu": "^6.1.4",
+    "defu": "^6.1.7",
     "express": "^5.2.1",
-    "vue": "^3.5.29",
+    "vue": "^3.5.32",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.11",
-    "@vitejs/plugin-vue": "^6.0.2",
-    "autoprefixer": "^10.4.24",
-    "postcss": "^8.5.4",
-    "tailwindcss": "^4.2.1",
-    "vite": "^7.2.7"
+    "@vitejs/plugin-vue": "^6.0.6",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^4.2.2",
+    "vite": "^8.0.8"
   }
 }
